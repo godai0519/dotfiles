@@ -1,0 +1,42 @@
+! General
+URxvt.depth: 32
+URxvt.termName: rxvt
+URxvt.fading: 10
+URxvt.scrollBar: false
+URxvt.saveLines: 65535
+URxvt.transparent: true
+
+! Appearance
+URxvt.font: xft:Ricty:Regular:size=11:antialias=true
+URxvt.foreground: rgba:ffff/ffff/ffff/ffff
+URxvt.background: rgba:0000/0000/0000/cccc
+
+URxvt.color4:  #5566ff
+URxvt.color12: #7799ff
+
+URxvt.modifier: alt
+URxvt.preeditType: OnTheSpot 
+URxvt.perl-ext: xim-onthespot
+
+!
+! Ext
+!
+URxvt.perl-ext-common: default,clipboard,url-select,tabbedex,vtwheel
+
+! clipboard
+URxvt.keysym.Meta-c: perl:clipboard:copy
+URxvt.keysym.Meta-v: perl:clipboard:paste
+
+! URL-Select
+URxvt.keysym.M-u: perl:url-select:select_nexta
+URxvt.url-select.launcher: /usr/bin/opera
+URxvt.url-select.underline: true
+URxvt.colorUL: #4682B4
+
+! tabbedex
+URxvt.tabbed.autohide: true
+URxvt.keysym.Control-t: perl:tabbedex:new_tab
+URxvt.keysym.Control-Tab: perl:tabbedex:next_tab
+URxvt.keysym.Control-Shift-Tab: perl:tabbedex:prev_tab
+URxvt.keysym.Control-Shift-R: perl:tabbedex:rename_tab
+
