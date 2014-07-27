@@ -98,14 +98,17 @@ endif
 call neobundle#rc(expand('~/.vim/bundle/'))
 
 NeoBundleFetch 'Shougo/neobundle.vim'
-NeoBundle 'Shougo/neocomplete.vim'
-NeoBundleLazy 'Shougo/unite.vim', {
-\   'autoload' : {
-\       'commands' : [ "Unite" ]
-\   }
+NeoBundle 'Shougo/neocomplete'
+NeoBundle 'Shougo/neosnippet'
+NeoBundle 'Shougo/neosnippet-snippets'
+NeoBundle 'Rip-Rip/clang_complete', {
+\   'autoload' : { 'filetypes' : ['cpp', 'hpp', 'ipp', 'cxx'] }
 \}
 NeoBundleLazy 'vim-jp/cpp-vim', {
 \   'autoload' : { 'filetypes' : ['cpp', 'hpp', 'ipp', 'cxx'] }
+\}
+NeoBundleLazy 'Shougo/unite.vim', {
+\   'autoload' : { 'commands' : [ "Unite" ] }
 \}
 NeoBundleLazy 'kana/vim-altr'
 NeoBundle 'Yggdroot/indentLine'
@@ -118,19 +121,57 @@ NeoBundleCheck
 "==========================================================
 " neocomplete
 "==========================================================
+let g:acp_enableAtStartup = 0
 let g:neocomplete#enable_at_startup = 1
 let g:neocomplete#enable_ignore_case = 1
 let g:neocomplete#enable_smart_case = 1
+let g:neocomplete#sources#syntax#min_keyword_length = 3 "デフォでいいか
+let g:neocomplete#lock_buffer_name_pattern = '\*ku\*'
+let g:neocomplete#force_overwrite_completefunc=1
+
 if !exists('g:neocomplete#keyword_patterns')
     let g:neocomplete#keyword_patterns = {}
 endif
+let g:neocomplete#keyword_patterns['default'] = '\h\w*'
+
+if !exists('g:neocomplete#sources#omni#input_patterns')
+    let g:neocomplete#sources#omni#input_patterns = {}
+endif
+let g:neocomplete#sources#omni#input_patterns.cpp = '[^.[:digit:] *\t]\%(\.\|->\)\w*\|\h\w*::\w*'
+let g:neocomplete#sources#omni#input_patterns.php = '[^. \t]->\h\w*\|\h\w*::'
+
+if !exists("g:neocomplcache_force_omni_patterns")
+    let g:neocomplcache_force_omni_patterns = {}
+endif
+let g:neocomplcache_force_omni_patterns.cpp = '[^.[:digit:] *\t]\%(\.\|->\)\|::'
+
 inoremap <expr><TAB> pumvisible() ? "\<C-n>" : "\<TAB>"
 inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<S-TAB>"
+inoremap <expr><C-h> neocomplete#smart_close_popup()."\<C-h>"
+inoremap <expr><BS> neocomplete#smart_close_popup()."\<C-h>"
+inoremap <expr><C-y> neocomplete#close_popup()
+inoremap <expr><C-e> neocomplete#cancel_popup()
 
-"if !exists('g:neocomplete#force_omni_input_patterns')
-"    let g:neocomplete#force_omni_input_patterns = {}
-"endif
-"let g:neocomplete#force_omni_input_patterns.cpp = '[^.[:digit:] *\t]\%(\.\|->\)\w*\|\h\w*::\w*'
+
+"==========================================================
+" neosnippet
+"==========================================================
+imap <C-k> <Plug>(neosnippet_expand_or_jump)
+smap <C-k> <Plug>(neosnippet_expand_or_jump)
+
+let s:snippet_direction = '~/.vim/snippet/'
+let g:neosnippet#snippets_directory = s:snippet_direction
+
+
+""==========================================================
+"" clang_complete
+""==========================================================
+let g:clang_complete_auto = 0
+let g:clang_auto_select = 0
+let g:clang_use_library = 1
+let g:clang_complete_copen = 1
+let g:clang_library_path = '/usr/lib'
+let g:clang_user_options = '-std=gnu++1y -stdlib=libc++'
 
 
 "==========================================================

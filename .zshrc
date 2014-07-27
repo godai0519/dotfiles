@@ -4,6 +4,7 @@
 alias l='ls -a'
 alias ll='ls -la'
 alias ls='ls --color=auto'
+alias ks='ls --color=auto'
 alias grep='grep --color=auto'
 alias g='git'
 alias diff='colordiff'

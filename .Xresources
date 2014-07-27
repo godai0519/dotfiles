@@ -1,7 +1,7 @@
 ! General
 URxvt.depth: 32
 URxvt.termName: rxvt
-URxvt.fading: 10
+URxvt.fading: 20
 URxvt.scrollBar: false
 URxvt.saveLines: 65535
 URxvt.transparent: true
