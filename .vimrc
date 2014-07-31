@@ -32,7 +32,7 @@ set statusline=%f%m%=%l,%c\ %{'['.(&fenc!=''?&fenc:&enc).']\ ['.&fileformat.']'}
 "==========================================================
 set list
 set listchars=tab:>-,trail:_,eol:$,extends:>,precedes:<,nbsp:%  "各種特殊文字の文字
-highlight JpSpace cterm=underline ctermfg=7 guifg=7             "全角スペースの色
+highlight JpSpace cterm=underline ctermfg=Blue guifg=Blue       "全角スペースの色
 au BufRead,BufNew * match JpSpace /　/                          "全角スペース怖い
 set display=uhex                                                "バイナリファイルの非印字可能文字を16進数で表示
 
