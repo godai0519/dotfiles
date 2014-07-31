@@ -7,17 +7,6 @@ scriptencoding utf-8
 
 
 "==========================================================
-" SyntaxHighlight
-"==========================================================
-syntax enable
-set background=dark
-set t_Co=256
-colorscheme hybrid
-highlight Normal ctermbg=none
-highlight LineNr ctermfg=darkgray
-
-
-"==========================================================
 " 基本設定
 "==========================================================
 set nocompatible               "viとの互換性なし
@@ -113,9 +102,22 @@ NeoBundleLazy 'Shougo/unite.vim', {
 NeoBundleLazy 'kana/vim-altr'
 NeoBundle 'Yggdroot/indentLine'
 
+NeoBundle 'w0ng/vim-hybrid'
+
 filetype plugin indent on
 
 NeoBundleCheck
+
+
+"==========================================================
+" SyntaxHighlight
+"==========================================================
+syntax enable
+set background=dark
+set t_Co=256
+colorscheme hybrid
+highlight Normal ctermbg=none
+highlight LineNr ctermfg=darkgray
 
 
 "==========================================================
