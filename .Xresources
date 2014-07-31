@@ -4,7 +4,8 @@ URxvt.termName: rxvt
 URxvt.fading: 20
 URxvt.scrollBar: false
 URxvt.saveLines: 65535
-URxvt.transparent: true
+URxvt.transparent: false
+URxvt.internalBorder: 0
 
 ! Appearance
 URxvt.font: xft:Ricty:Regular:size=11:antialias=true
