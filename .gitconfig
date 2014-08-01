@@ -2,5 +2,5 @@
 	email = godai0519@gmail.com
 	name = godai_0519
 [core]
-	autoCRLF = false
+	autoCRLF = input
 	safecrlf = true
