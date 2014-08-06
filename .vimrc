@@ -12,7 +12,7 @@ scriptencoding utf-8
 set nocompatible               "viとの互換性なし
 set scrolloff=5                "カーソルの上下の最低行数
 set wrap                       "行折り返し
-set breakindent                "行折り返しでインデントを考慮(vimに未実装)
+set breakindent                "行折り返しでインデントを考慮
 set nobackup                   "上書き時バックアップ作成禁止
 set autoread                   "書き換え時，自動で読みなおす
 set noswapfile                 "swapファイル作成禁止
@@ -31,7 +31,7 @@ set statusline=%f%m%=%l,%c\ %{'['.(&fenc!=''?&fenc:&enc).']\ ['.&fileformat.']'}
 " 不可視文字の設定
 "==========================================================
 set list
-set listchars=tab:>-,trail:_,eol:$,extends:>,precedes:<,nbsp:%  "各種特殊文字の文字
+set listchars=tab:>-,trail:_,extends:>,precedes:<,nbsp:%   "各種特殊文字の文字
 highlight JpSpace cterm=underline ctermfg=Blue guifg=Blue       "全角スペースの色
 au BufRead,BufNew * match JpSpace /　/                          "全角スペース怖い
 set display=uhex                                                "バイナリファイルの非印字可能文字を16進数で表示
@@ -90,17 +90,29 @@ NeoBundleFetch 'Shougo/neobundle.vim'
 NeoBundle 'Shougo/neocomplete'
 NeoBundle 'Shougo/neosnippet'
 NeoBundle 'Shougo/neosnippet-snippets'
+NeoBundle 'Shougo/vimproc.vim', {
+\   'build' : {
+\       'windows' : 'tools\\update-dll-mingw',
+\       'cygwin' : 'make -f make_cygwin.mak',
+\       'mac' : 'make -f make_mac.mak',
+\       'unix' : 'make -f make_unix.mak',
+\   },
+\}
+NeoBundleLazy 'Shougo/unite.vim', { 'autoload' : { 'commands' : [ "Unite" ] } }
+NeoBundle 'Shougo/neomru.vim'
+
 NeoBundle 'Rip-Rip/clang_complete', {
 \   'autoload' : { 'filetypes' : ['cpp', 'hpp', 'ipp', 'cxx'] }
 \}
 NeoBundleLazy 'vim-jp/cpp-vim', {
 \   'autoload' : { 'filetypes' : ['cpp', 'hpp', 'ipp', 'cxx'] }
 \}
-NeoBundleLazy 'Shougo/unite.vim', {
-\   'autoload' : { 'commands' : [ "Unite" ] }
-\}
+
 NeoBundleLazy 'kana/vim-altr'
 NeoBundle 'Yggdroot/indentLine'
+
+NeoBundle 'thinca/vim-quickrun'
+NeoBundle 'rhysd/wandbox-vim'
 
 NeoBundle 'w0ng/vim-hybrid'
 
@@ -165,9 +177,9 @@ let s:snippet_direction = '~/.vim/snippet/'
 let g:neosnippet#snippets_directory = s:snippet_direction
 
 
-""==========================================================
-"" clang_complete
-""==========================================================
+"==========================================================
+" clang_complete
+"==========================================================
 let g:clang_complete_auto = 0
 let g:clang_auto_select = 0
 let g:clang_use_library = 1
@@ -177,9 +189,24 @@ let g:clang_user_options = '-std=gnu++1y -stdlib=libc++'
 
 
 "==========================================================
+" Unite
+"==========================================================
+let g:unite_enable_start_insert=1
+noremap <C-P> :Unite buffer<CR>
+noremap <C-N> :Unite -buffer-name=file file<CR>
+noremap <C-Z> :Unite file_mru<CR>
+
+au FileType unite nnoremap <silent> <buffer> <expr> <C-J> unite#do_action('split')
+au FileType unite inoremap <silent> <buffer> <expr> <C-J> unite#do_action('split')
+au FileType unite nnoremap <silent> <buffer> <expr> <C-K> unite#do_action('vsplit')
+au FileType unite inoremap <silent> <buffer> <expr> <C-K> unite#do_action('vsplit')
+
+
+"==========================================================
 " vim-altr
 "==========================================================
-nnoremap <Leader>a <Plug>(altr-forward)
+noremap <F3> <Plug>(altr-forward)
+noremap <F2> <Plug>(altr-back)
 
 
 "==========================================================
@@ -187,6 +214,25 @@ nnoremap <Leader>a <Plug>(altr-forward)
 "==========================================================
 let g:indentLine_color_term = 111
 let g:indentLine_color_gui = '#708090'
+
+
+"==========================================================
+" vim-quickrun
+"==========================================================
+let g:quickrun_config = {
+\   "_" : {
+\       "runner" : "vimproc",
+\       "runner/vimproc/updatetime" : 60,
+\       "outputter/buffer/split" : ":botright",
+\       "outputter/buffer/close_on_empty" : 1
+\   },
+\   "cpp" : {
+\       "cmdopt" : "-std=gnu++1y -W -Wall"
+\   },
+\}
+
+"<C-c>の強制終了．quickrun未実行ならば，そのまま通す
+nnoremap <expr><silent> <C-c> quickrun#is_running() ? quickrun#sweep_sessions() : "\<C-c>"
 
 
 "==========================================================

@@ -4,3 +4,5 @@
 [core]
 	autoCRLF = input
 	safecrlf = true
+[push]
+	default = upstream
