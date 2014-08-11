@@ -1,8 +1,42 @@
 [user]
-	email = godai0519@gmail.com
-	name = godai_0519
+    name = Godai Azuma
+    email = godai0519@gmail.com
+
+[color]
+    status = auto
+    diff = auto
+    branch = auto
+    grep = auto
+
 [core]
-	autoCRLF = input
-	safecrlf = true
+    excludesfile = ~/.gitignore
+    autocrlf = input
+    safecrlf = true
+    editor = vim
+    quotepath = false
+
 [push]
-	default = upstream
+    default = upstream
+
+[merge]
+    tool = vimdiff
+    ff = false
+
+[pull]
+    rebase = true
+
+[pager]
+    log = diff-highlight | less
+    show = diff-highlight | less
+    diff = diff-highlight | less
+
+[alias]
+    st = status
+    sh = show
+    ft = fetch
+    ps = push
+    pf = push -f origin
+    pu = push -u origin
+    au = add -u
+    commit = commit -s
+
