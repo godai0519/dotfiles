@@ -2,6 +2,7 @@
 " Encoding
 "==========================================================
 set encoding=utf-8
+set fileencoding=utf-8
 set fileencodings=ucs-bom,utf-8,iso-2022-jp,sjis,cp932,euc-jp,cp20932
 scriptencoding utf-8
 
@@ -98,23 +99,41 @@ NeoBundle 'Shougo/vimproc.vim', {
 \       'unix' : 'make -f make_unix.mak',
 \   },
 \}
-NeoBundleLazy 'Shougo/unite.vim', { 'autoload' : { 'commands' : [ "Unite" ] } }
-NeoBundle 'Shougo/neomru.vim'
 
-NeoBundle 'Rip-Rip/clang_complete', {
-\   'autoload' : { 'filetypes' : ['cpp', 'hpp', 'ipp', 'cxx'] }
-\}
-NeoBundleLazy 'vim-jp/cpp-vim', {
-\   'autoload' : { 'filetypes' : ['cpp', 'hpp', 'ipp', 'cxx'] }
-\}
+" Unite
+NeoBundle 'Shougo/neomru.vim'
+NeoBundleLazy 'Shougo/unite.vim', { 'autoload' : { 'commands' : [ "Unite" ] } }
+NeoBundleLazy 'osyo-manga/unite-github', { 'autoload' : { 'commands' : [ "Unite" ] } }
 
 NeoBundleLazy 'kana/vim-altr'
 NeoBundle 'Yggdroot/indentLine'
 
+" Quickrun関係
 NeoBundle 'thinca/vim-quickrun'
 NeoBundle 'rhysd/wandbox-vim'
 
+" Color
 NeoBundle 'w0ng/vim-hybrid'
+
+" C++
+NeoBundleLazy 'Rip-Rip/clang_complete', { 'autoload' : { 'filetypes' : ['cpp'] }}
+NeoBundleLazy 'vim-jp/cpp-vim',         { 'autoload' : { 'filetypes' : ['cpp'] }}
+
+" Haskell
+NeoBundleLazy 'eagletmt/ghcmod-vim',             { 'autoload' : { 'filetypes' : ['haskell'] }}
+NeoBundleLazy 'eagletmt/neco-ghc',               { 'autoload' : { 'filetypes' : ['haskell'] }}
+NeoBundleLazy 'kana/vim-filetype-haskell',       { 'autoload' : { 'filetypes' : ['haskell'] }}
+NeoBundleLazy 'dag/vim2hs',                      { 'autoload' : { 'filetypes' : ['haskell'] }}
+NeoBundleLazy 'pbrisbin/vim-syntax-shakespeare', { 'autoload' : { 'filetypes' : ['haskell'] }}
+
+" Lisp
+NeoBundle 'vim-scripts/slimv.vim'
+
+" HTML
+NeoBundle 'amirh/HTML-AutoCloseTag'
+NeoBundle 'hail2u/vim-css3-syntax'
+NeoBundle 'gorodinskiy/vim-coloresque'
+NeoBundle 'tpope/vim-haml'
 
 filetype plugin indent on
 
@@ -284,5 +303,4 @@ map <silent> [Tag]n :tabnext<CR>
 " tn 次のタブ
 map <silent> [Tag]p :tabprevious<CR>
 " tp 前のタブ
-
 
