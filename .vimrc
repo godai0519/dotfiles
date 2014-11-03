@@ -26,6 +26,7 @@ set showmatch                  "(),{}のお知らせ
 set cursorline                 "ライン強調
 set laststatus=2               "ステータスラインの設定
 set statusline=%f%m%=%l,%c\ %{'['.(&fenc!=''?&fenc:&enc).']\ ['.&fileformat.']'}
+set nrformats=alpha,hex        "<C-a>と<C-x>での増減について，8進却下・英字許可
 
 
 "==========================================================
