@@ -1,16 +1,15 @@
 "==========================================================
 " Encoding
 "==========================================================
+scriptencoding utf-8
 set encoding=utf-8
 set fileencoding=utf-8
 set fileencodings=ucs-bom,utf-8,iso-2022-jp,sjis,cp932,euc-jp,cp20932
-scriptencoding utf-8
 
 
 "==========================================================
 " 基本設定
 "==========================================================
-set nocompatible               "viとの互換性なし
 set scrolloff=5                "カーソルの上下の最低行数
 set wrap                       "行折り返し
 set breakindent                "行折り返しでインデントを考慮
@@ -80,7 +79,6 @@ augroup END
 "==========================================================
 " neobundle
 "==========================================================
-set nocompatible
 filetype plugin indent off
 
 if has('vim_starting')
