@@ -6,10 +6,39 @@ alias ll='ls -la'
 alias ls='ls --color=auto'
 alias ks='ls --color=auto'
 alias grep='grep --color=auto'
-alias g='git'
 alias diff='colordiff'
 alias mkdir='mkdir -p -v'
 
+### Git Alias ###
+alias gs='git status'
+alias gss='git status -s'
+alias ga='git add'
+alias gap='git add -p'
+
+alias gst='git log --oneline --decorate --color --graph'
+alias gl='git log --oneline'
+alias gln='git log --name-only'
+for n in $(seq 50); do
+    alias gl$n="git log --oneline -n $n | tee"
+done
+
+alias gd='git diff'
+alias gdn='git diff --name-only'
+for n in $(seq 50); do
+    alias gd$n="git diff HEAD~$n"
+    alias gdn$n="git diff --name-only HEAD~$n"
+done
+
+alias gci='git commit'
+alias gcm='git commit -m'
+alias gca='git commit --amend'
+
+alias gco='git checkout'
+alias gcot='git checkout --theirs'
+
+alias grhh='git reset HEAD --hard'
+
+### Sudo Alias ###
 if [ $UID -ne 0 ]; then
     alias svim='sudoedit'
     alias netctl='sudo netctl'
