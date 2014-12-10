@@ -9,7 +9,8 @@ alias grep='grep --color=auto'
 alias diff='colordiff'
 alias mkdir='mkdir -p -v'
 
-### Git Alias ###
+### Git Alias ### 
+# {{{1
 alias gs='git status'
 alias gss='git status -s'
 alias ga='git add'
@@ -37,6 +38,7 @@ alias gco='git checkout'
 alias gcot='git checkout --theirs'
 
 alias grhh='git reset HEAD --hard'
+# }}}
 
 ### Sudo Alias ###
 if [ $UID -ne 0 ]; then
@@ -92,16 +94,165 @@ RPROMPT=$tmp_rprompt  # 右側のプロンプト
 SPROMPT=$tmp_sprompt  # スペル訂正用プロンプト
 REPORTTIME=3 # 3秒以上で実行時間
 
-# http://kitak.hatenablog.jp/entry/2013/05/25/103059
+# vcs用表示
+# http://qiita.com/mollifier/items/8d5a627d773758dd8078 {{{1
 autoload -Uz vcs_info
+autoload -Uz add-zsh-hook
+
+zstyle ':vcs_info:*' max-exports 3
+
+# 標準のフォーマット(git 以外で使用)
+# misc(%m) は通常は空文字列に置き換えられる
 zstyle ':vcs_info:*' formats '(%s)-[%b]'
-zstyle ':vcs_info:*' actionformats '(%s)-[%b|%a]'
-precmd () {
-    psvar=()
-    LANG=en_US.UTF-8 vcs_info
-    [[ -n "$vcs_info_msg_0_" ]] && psvar[1]="$vcs_info_msg_0_"
+zstyle ':vcs_info:*' actionformats '(%s)-[%b]' '%m' '<!%a>'
+zstyle ':vcs_info:(svn|bzr):*' branchformat '%b:r%r'
+zstyle ':vcs_info:bzr:*' use-simple true
+
+# git 用のフォーマット
+# git のときはステージしているかどうかを表示
+zstyle ':vcs_info:git:*' formats '%c%u(%s)-[%b' '%m]%f'
+zstyle ':vcs_info:git:*' actionformats '%c%u(%s)-[%b' '%m]%f' '<!%a>'
+zstyle ':vcs_info:git:*' check-for-changes true
+zstyle ':vcs_info:git:*' stagedstr "%f"    # %c で表示する文字列
+zstyle ':vcs_info:git:*' unstagedstr "%f"  # %u で表示する文字列
+
+# hooks 設定
+zstyle ':vcs_info:git+set-message:*' hooks \
+                                        git-hook-begin \
+                                        git-untracked \
+                                        git-nothing-added \
+                                        git-push-status \
+                                        git-nomerge-branch \
+                                        git-stash-count
+
+function +vi-git-hook-begin() {
+    if [[ $(command git rev-parse --is-inside-work-tree 2> /dev/null) != 'true' ]]; then
+        # 0以外を返すとそれ以降のフック関数は呼び出されない
+        return 1
+    fi
+
+    return 0
 }
-RPROMPT="%1(v|%F{green}%1v%f|) $RPROMPT"
+
+# nothing-added
+function +vi-git-nothing-added() {
+    if [[ "$1" != "0" ]]; then
+        return 0
+    fi
+
+    if command git status --porcelain 2> /dev/null \
+        | awk '{print $1}' \
+        | command grep -F 'M' > /dev/null 2>&1 ; then
+        hook_com[unstaged]+='%F{red}'
+    fi
+}
+
+# untracked
+function +vi-git-untracked() {
+    if [[ "$1" != "0" ]]; then
+        return 0
+    fi
+
+    if command git status --porcelain 2> /dev/null \
+        | awk '{print $1}' \
+        | command grep -F '??' > /dev/null 2>&1 ; then
+
+        # unstaged (%u) に追加
+        hook_com[unstaged]+='%F{cyan}'
+    fi
+}
+
+# push していないコミットの件数表示
+#
+# リモートリポジトリに push していないコミットの件数を
+# pN という形式で misc (%m) に表示する
+function +vi-git-push-status() {
+    if [[ "$1" != "0" ]]; then
+        return 0
+    fi
+
+    if [[ "${hook_com[branch]}" != "master" ]]; then
+        # master ブランチでない場合は何もしない
+        return 0
+    fi
+
+    # push していないコミット数を取得する
+    local ahead
+    ahead=$(command git rev-list origin/master..master 2>/dev/null \
+        | wc -l \
+        | tr -d ' ')
+
+    if [[ "$ahead" -gt 0 ]]; then
+        # misc (%m) に追加
+        hook_com[misc]+="(p${ahead})"
+    fi
+}
+
+# マージしていない件数表示
+#
+# master 以外のブランチにいる場合に、
+# 現在のブランチ上でまだ master にマージしていないコミットの件数を
+# (mN) という形式で misc (%m) に表示
+function +vi-git-nomerge-branch() {
+    if [[ "$1" != "0" ]]; then
+        return 0
+    fi
+
+    if [[ "${hook_com[branch]}" == "master" ]]; then
+        # master ブランチの場合は何もしない
+        return 0
+    fi
+
+    local nomerged
+    nomerged=$(command git rev-list master..${hook_com[branch]} 2>/dev/null | wc -l | tr -d ' ')
+
+    if [[ "$nomerged" -gt 0 ]] ; then
+        # misc (%m) に追加
+        hook_com[misc]+="(m${nomerged})"
+    fi
+}
+
+
+# stash 件数表示
+#
+# stash している場合は :SN という形式で misc (%m) に表示
+function +vi-git-stash-count() {
+    if [[ "$1" != "0" ]]; then
+        return 0
+    fi
+
+    local stash
+    stash=$(command git stash list 2>/dev/null | wc -l | tr -d ' ')
+    if [[ "${stash}" -gt 0 ]]; then
+        # misc (%m) に追加
+        hook_com[misc]+=":S${stash}"
+    fi
+}
+
+function _update_vcs_info_msg() {
+    local -a messages
+    local prompt
+
+    LANG=en_US.UTF-8 vcs_info
+
+    if [[ -z ${vcs_info_msg_0_} ]]; then
+        # vcs_info で何も取得していない場合はプロンプトを表示しない
+        prompt=""
+    else
+        # vcs_info で情報を取得した場合
+        # $vcs_info_msg_0_ , $vcs_info_msg_1_ , $vcs_info_msg_2_ を
+        # それぞれ緑、黄色、赤で表示する
+        [[ -n "$vcs_info_msg_0_" ]] && messages+=( "%F{green}${vcs_info_msg_0_}${vcs_info_msg_1_}%f" )
+        [[ -n "$vcs_info_msg_2_" ]] && messages+=( "%F{red}${vcs_info_msg_2_}%f" )
+
+        # 間にスペースを入れて連結する
+        prompt="${(j: :)messages}"
+    fi
+
+    RPROMPT="$prompt $tmp_rprompt"
+}
+add-zsh-hook precmd _update_vcs_info_msg
+#}}}
 
 # zsh キー設定 #
 bindkey "^[[7~" beginning-of-line                 # Home
@@ -110,4 +261,6 @@ bindkey "^[[3~" delete-char                       # Delete
 bindkey "^[[2~" overwrite-mode                    # Insert
 bindkey "^[[5~" history-beginning-search-backward # Page Up
 bindkey "^[[6~" history-beginning-search-forward  # Page Down
+
+# vim:set foldmethod=marker:
 
