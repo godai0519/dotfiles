@@ -137,10 +137,11 @@ NeoBundleLazy 'pbrisbin/vim-syntax-shakespeare', { 'autoload' : { 'filetypes' : 
 NeoBundle 'vim-scripts/slimv.vim'
 
 " HTML
-NeoBundle 'amirh/HTML-AutoCloseTag'
-NeoBundle 'hail2u/vim-css3-syntax'
-NeoBundle 'gorodinskiy/vim-coloresque'
-NeoBundle 'tpope/vim-haml'
+NeoBundleLazy 'amirh/HTML-AutoCloseTag',    { 'autoload' : { 'filetypes' : ['html'] }}
+NeoBundleLazy 'hail2u/vim-css3-syntax',     { 'autoload' : { 'filetypes' : ['html'] }}
+NeoBundleLazy 'gorodinskiy/vim-coloresque', { 'autoload' : { 'filetypes' : ['html'] }}
+NeoBundleLazy 'tpope/vim-haml',             { 'autoload' : { 'filetypes' : ['html'] }}
+NeoBundleLazy 'tmhedberg/matchit',          { 'autoload' : { 'filetypes' : ['html'] }}
 
 " Markdown
 NeoBundle 'plasticboy/vim-markdown'
