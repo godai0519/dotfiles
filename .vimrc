@@ -22,10 +22,16 @@ set clipboard=unnamed          "OSのクリップボード使用
 set ruler                      "現在地の表示
 set number                     "行番号表示
 set showmatch                  "(),{}のお知らせ
+set matchtime=1                "showmatchを0.1s
 set cursorline                 "ライン強調
 set laststatus=2               "ステータスラインの設定
 set statusline=%f%m%=%l,%c\ %{'['.(&fenc!=''?&fenc:&enc).']\ ['.&fileformat.']'}
 set nrformats=alpha,hex        "<C-a>と<C-x>での増減について，8進却下・英字許可
+set foldmethod=marker          "markerで自動折りたたみ可能
+set pumheight=10
+
+nnoremap Y y$
+
 
 
 "==========================================================
@@ -104,6 +110,7 @@ NeoBundle 'Shougo/vimproc.vim', {
 NeoBundle 'Shougo/neomru.vim'
 NeoBundleLazy 'Shougo/unite.vim', { 'autoload' : { 'commands' : [ "Unite" ] } }
 NeoBundleLazy 'osyo-manga/unite-github', { 'autoload' : { 'commands' : [ "Unite" ] } }
+NeoBundleLazy 'h1mesuke/unite-outline', { 'autoload' : { 'commands' : [ "Unite" ] } }
 
 NeoBundleLazy 'kana/vim-altr'
 NeoBundle 'Yggdroot/indentLine'
