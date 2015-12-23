@@ -95,7 +95,6 @@ if has('vim_starting')
 endif
 call neobundle#begin(expand('~/.vim/bundle/'))
 NeoBundleFetch 'Shougo/neobundle.vim'
-call neobundle#end()
 
 NeoBundle 'Shougo/neocomplete'
 NeoBundle 'Shougo/neosnippet'
@@ -150,6 +149,12 @@ NeoBundleLazy 'tmhedberg/matchit',          { 'autoload' : { 'filetypes' : ['htm
 NeoBundle 'plasticboy/vim-markdown'
 NeoBundle 'kannokanno/previm'
 NeoBundle 'tyru/open-browser.vim'
+
+" Hatena Blog
+NeoBundle 'mattn/webapi-vim'
+NeoBundle 'moznion/hateblo.vim'
+
+call neobundle#end()
 
 filetype plugin indent on
 
