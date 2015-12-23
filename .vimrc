@@ -80,7 +80,10 @@ augroup BinaryXXD
     autocmd BufWritePost * set nomod | endif
 augroup END
 
-
+"==========================================================
+" Extension Settings
+"==========================================================
+au BufRead,BufNewFile *.md set filetype=markdown
 
 "==========================================================
 " neobundle
