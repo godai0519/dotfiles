@@ -146,6 +146,10 @@ NeoBundleLazy 'plasticboy/vim-markdown', { 'autoload' : { 'filetypes' : ['markdo
 NeoBundleLazy 'kannokanno/previm', { 'autoload' : { 'filetypes' : ['markdown'] }}
 NeoBundleLazy 'tyru/open-browser.vim', { 'autoload' : { 'filetypes' : ['markdown'] }}
 
+" Git
+NeoBundle 'tpope/vim-fugitive'
+NeoBundle 'kmnk/vim-unite-giti'
+
 " Hatena Blog
 NeoBundle 'mattn/webapi-vim'
 NeoBundle 'moznion/hateblo.vim'
@@ -258,6 +262,54 @@ au FileType unite nnoremap <silent> <buffer> <expr> <C-J> unite#do_action('split
 au FileType unite inoremap <silent> <buffer> <expr> <C-J> unite#do_action('split')
 au FileType unite nnoremap <silent> <buffer> <expr> <C-K> unite#do_action('vsplit')
 au FileType unite inoremap <silent> <buffer> <expr> <C-K> unite#do_action('vsplit')
+
+let g:giti_git_command = executable('hub') ? 'hub' : 'git'
+nnoremap <silent>gm :Gcommit<CR>
+nnoremap <silent>gM :Gcommit --amend<CR>
+nnoremap <silent>gb :Gblame<CR>
+nnoremap <silent>gB :Gbrowse<CR>
+
+let g:fugitive_git_executable = executable('hub') ? 'hub' : 'git'
+nnoremap <silent>gs :Unite giti/status -horizontal<CR>
+nnoremap <silent>gl :Unite giti/log -horizontal<CR>
+nnoremap <silent>gs :Unite giti/status -horizontal<CR>
+nnoremap <silent>gh :Unite giti/branch_all<CR>
+
+augroup UniteCommand
+  autocmd!
+  autocmd FileType unite call <SID>unite_settings()
+augroup END
+
+function! s:unite_settings() "{{{
+  for source in unite#get_current_unite().sources
+    let source_name = substitute(source.name, '[-/]', '_', 'g')
+    if !empty(source_name) && has_key(s:unite_hooks, source_name)
+      call s:unite_hooks[source_name]()
+    endif
+  endfor
+endfunction"}}}
+
+let s:unite_hooks = {}
+
+function! s:unite_hooks.giti_status() "{{{
+  nnoremap <silent><buffer><expr>gM unite#do_action('ammend')
+  nnoremap <silent><buffer><expr>gm unite#do_action('commit')
+  nnoremap <silent><buffer><expr>ga unite#do_action('stage')
+  nnoremap <silent><buffer><expr>gc unite#do_action('checkout')
+  nnoremap <silent><buffer><expr>gd unite#do_action('diff')
+  nnoremap <silent><buffer><expr>gu unite#do_action('unstage')
+endfunction "}}}
+
+function! s:unite_hooks.giti_branch() "{{{
+  nnoremap <silent><buffer><expr>d unite#do_action('delete')
+  nnoremap <silent><buffer><expr>D unite#do_action('delete_force')
+  nnoremap <silent><buffer><expr>rd unite#do_action('delete_remote')
+  nnoremap <silent><buffer><expr>rD unite#do_action('delete_remote_force')
+endfunction "}}}
+
+function! s:unite_hooks.giti_branch_all() "{{{
+  call self.giti_branch()
+endfunction "}}}
 " }}}
 
 " vim-altr {{{
