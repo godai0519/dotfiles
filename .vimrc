@@ -24,7 +24,7 @@ set showmatch                  "(),{}のお知らせ
 set matchtime=1                "showmatchを0.1s
 set cursorline                 "ライン強調
 set laststatus=2               "ステータスラインの設定
-set statusline=%f%m%=%l,%c\ %{'['.(&fenc!=''?&fenc:&enc).']\ ['.&fileformat.']'}
+set statusline=%f%m\ %{fugitive#statusline()}\ %=%l,%c\ %{'['.(&fenc!=''?&fenc:&enc).']\ ['.&fileformat.']'}
 set nrformats=alpha,hex        "<C-a>と<C-x>での増減について，8進却下・英字許可
 set foldmethod=marker          "markerで自動折りたたみ可能
 set pumheight=10
@@ -145,6 +145,9 @@ NeoBundleLazy 'tmhedberg/matchit', { 'autoload' : { 'filetypes' : ['html'] }}
 NeoBundleLazy 'plasticboy/vim-markdown', { 'autoload' : { 'filetypes' : ['markdown'] }}
 NeoBundleLazy 'kannokanno/previm', { 'autoload' : { 'filetypes' : ['markdown'] }}
 NeoBundleLazy 'tyru/open-browser.vim', { 'autoload' : { 'filetypes' : ['markdown'] }}
+
+" TeX
+let g:tex_conceal='' " texのconcealを無効化（#^ω^）
 
 " Git
 NeoBundle 'tpope/vim-fugitive'
