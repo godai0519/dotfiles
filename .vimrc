@@ -4,7 +4,6 @@ scriptencoding utf-8
 set encoding=utf-8
 set fileencoding=utf-8
 set fileencodings=ucs-bom,utf-8,iso-2022-jp,sjis,cp932,euc-jp,cp20932
-filetype plugin indent on
 " }}}
 
 " 基本設定 {{{
@@ -58,107 +57,48 @@ set smarttab
 set tabstop=4
 " }}}
 
-" Binary Editor {{{
-"==================
-augroup BinaryXXD
-    autocmd!
-    autocmd BufReadPre  *.bin let &binary =1
-    autocmd BufReadPost * if &binary | silent %!xxd -g 1
-    autocmd BufReadPost * set ft=xxd | endif
-    autocmd BufWritePre * if &binary | %!xxd -r | endif
-    autocmd BufWritePost * if &binary | silent %!xxd -g 1
-    autocmd BufWritePost * set nomod | endif
-augroup END
-" }}}
-
 " Extension Settings {{{
 "=======================
 au BufRead,BufNewFile *.md set filetype=markdown
 " }}}
 
-" neobundle {{{
+" dein {{{
 "===============
+let s:dein_dir = expand('~/.vim/dein')
+let s:dein_repo = s:dein_dir . '/repos/github.com/Shougo/dein.vim'
+
+" deinがなければclone
+if !isdirectory(s:dein_repo)
+    execute '!git clone https://github.com/Shougo/dein.vim' s:dein_repo
+endif
+
 if has('vim_starting')
-    set runtimepath+=~/.vim/bundle/neobundle.vim
+    execute 'set runtimepath^=' . fnamemodify(s:dein_repo, ':p')
 endif
 
-" neobundleがなければclone
-if !filereadable(expand('~/.vim/bundle/neobundle.vim/README.md'))
-    silent !mkdir -p ~/.vim/bundle
-    silent !git clone https://github.com/Shougo/neobundle.vim ~/.vim/bundle/neobundle.vim/
+" TOML {{{
+" プラグインリストを収めた TOML ファイル
+let s:toml_dir  = '~/.vim/rc'
+let s:toml      = s:toml_dir . '/dein.toml'
+let s:toml_lazy = s:toml_dir . '/dein_lazy.toml'
+
+if dein#load_state(s:dein_dir)
+    call dein#begin(s:dein_dir)
+    call dein#load_toml(s:toml,      {'lazy': 0})
+    call dein#load_toml(s:toml_lazy, {'lazy': 1})
+    call dein#end()
+    call dein#save_state()
+endif
+" }}}
+
+
+" 未インストールのプラグインをインストール
+if dein#check_install()
+    call dein#install()
 endif
 
-call neobundle#begin(expand('~/.vim/bundle/'))
-NeoBundleFetch 'Shougo/neobundle.vim'
-
-" Color
-NeoBundle 'w0ng/vim-hybrid'
-
-" Common
-NeoBundle 'Shougo/neocomplete.vim'
-NeoBundle 'Shougo/neosnippet'
-NeoBundle 'Shougo/neosnippet-snippets'
-NeoBundle 'Shougo/vimproc.vim', {
-\   'build' : {
-\       'windows' : 'tools\\update-dll-mingw',
-\       'cygwin' : 'make -f make_cygwin.mak',
-\       'mac' : 'make -f make_mac.mak',
-\       'unix' : 'make -f make_unix.mak',
-\   },
-\}
-
-" Unite
-NeoBundle 'Shougo/neomru.vim'
-NeoBundleLazy 'Shougo/unite.vim', { 'autoload' : { 'commands' : [ "Unite" ] } }
-NeoBundleLazy 'osyo-manga/unite-github', { 'autoload' : { 'commands' : [ "Unite" ] } }
-NeoBundleLazy 'h1mesuke/unite-outline', { 'autoload' : { 'commands' : [ "Unite" ] } }
-
-NeoBundleLazy 'kana/vim-altr'
-NeoBundle 'Yggdroot/indentLine'
-
-" Quickrun関係
-NeoBundle 'thinca/vim-quickrun'
-NeoBundle 'rhysd/wandbox-vim'
-
-" C++
-NeoBundle 'vim-jp/cpp-vim', { 'autoload' : { 'filetypes' : ['cpp'] }}
-NeoBundle 'justmao945/vim-clang', { 'autoload' : { 'filetypes' : ['cpp'] }}
-
-" Haskell
-NeoBundleLazy 'eagletmt/ghcmod-vim', { 'autoload' : { 'filetypes' : ['haskell'] }}
-NeoBundleLazy 'eagletmt/neco-ghc', { 'autoload' : { 'filetypes' : ['haskell'] }}
-NeoBundleLazy 'kana/vim-filetype-haskell', { 'autoload' : { 'filetypes' : ['haskell'] }}
-NeoBundleLazy 'dag/vim2hs', { 'autoload' : { 'filetypes' : ['haskell'] }}
-NeoBundleLazy 'pbrisbin/vim-syntax-shakespeare', { 'autoload' : { 'filetypes' : ['haskell'] }}
-
-" Lisp
-NeoBundleLazy 'vim-scripts/slimv.vim', { 'autoload' : { 'filetypes' : ['lisp'] }}
-
-" HTML
-NeoBundleLazy 'amirh/HTML-AutoCloseTag', { 'autoload' : { 'filetypes' : ['html'] }}
-NeoBundleLazy 'hail2u/vim-css3-syntax', { 'autoload' : { 'filetypes' : ['html'] }}
-NeoBundleLazy 'gorodinskiy/vim-coloresque', { 'autoload' : { 'filetypes' : ['html'] }}
-NeoBundleLazy 'tpope/vim-haml', { 'autoload' : { 'filetypes' : ['html'] }}
-NeoBundleLazy 'tmhedberg/matchit', { 'autoload' : { 'filetypes' : ['html'] }}
-
-" Markdown
-NeoBundleLazy 'plasticboy/vim-markdown', { 'autoload' : { 'filetypes' : ['markdown'] }}
-NeoBundleLazy 'kannokanno/previm', { 'autoload' : { 'filetypes' : ['markdown'] }}
-NeoBundleLazy 'tyru/open-browser.vim', { 'autoload' : { 'filetypes' : ['markdown'] }}
-
-" TeX
-let g:tex_conceal='' " texのconcealを無効化（#^ω^）
-
-" Git
-NeoBundle 'tpope/vim-fugitive'
-NeoBundle 'kmnk/vim-unite-giti'
-
-" Hatena Blog
-NeoBundle 'mattn/webapi-vim'
-NeoBundle 'moznion/hateblo.vim'
-
-call neobundle#end()
-NeoBundleCheck
+" プラグインロードできたので有効化
+filetype plugin indent on
 " }}}
 
 " SyntaxHighlight {{{
@@ -169,93 +109,51 @@ set t_Co=256
 colorscheme hybrid
 highlight Normal ctermbg=none
 highlight LineNr ctermfg=darkgray
+" }}}
+
+" 'justmao945/vim-clang' {{{
+
+" disable auto completion for vim-clang
+let g:clang_auto = 0
+
+" default 'longest' can not work with neocomplete
+let g:clang_c_completeopt   = 'menuone'
+let g:clang_cpp_completeopt = 'menuone'
+
+let g:clang_exec = 'clang'
+let g:clang_format_exec = 'clang-format'
+let g:clang_c_options = '-std=c11'
+let g:clang_cpp_options = '-std=c++1z -stdlib=libstdc++'
 
 " }}}
 
-" neocomplete.vim {{{
-"====================
+" 'Shougo/neocomplete.vim' {{{
 let g:neocomplete#enable_at_startup = 1
-" _(underscore)区切りの補完を有効化
-let g:neocomplete#enable_underbar_completion = 1
-" Syntax Cache対象となる最小文字列長を3
-let g:neocomplete#min_syntax_length = 3
 
-" Define dictionary
-let g:neocomplete#dictionary_filetype_lists = {
-    \ 'default' : '',
-    \ 'cpp' : $HOME.'/.vim/dict/cpp.dict',
-    \ 'java' : $HOME.'/.vim/dict/java.dict',
-    \ 'vim' : $HOME.'/.vim/dict/vim.dict'
-    \ }
-
-" Define keyword
-if !exists('g:neocomplete#keyword_patterns')
-    let g:neocomplete#keyword_patterns = {}
-endif
-let g:neocomplete#keyword_patterns['default'] = '\h\w*'
-
-" Key mapping {{{
-" <TAB>: completion.
-inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
-" <C-h>, <BS>: close popup and delete backword char.
-inoremap <expr><C-h> neocomplete#smart_close_popup()."\<C-h>"
-inoremap <expr><BS> neocomplete#smart_close_popup()."\<C-h>"
-inoremap <expr><C-x><C-o> &filetype == 'vim' ? "\<C-x><C-v><C-p>" : neocomplete#manual_omni_complete()
-" }}}
-
-" Enable omni completion
-if !exists('g:neocomplete#omni_patterns')
-    let g:neocomplete#omni_patterns = {}
-endif
-let g:neocomplete#omni_patterns.ruby = '[^. *\t]\.\h\w*\|\h\w*::'
-
-" Enable force omni completion
 if !exists('g:neocomplete#force_omni_input_patterns')
-    let g:neocomplete#force_omni_input_patterns = {}
+  let g:neocomplete#force_omni_input_patterns = {} 
 endif
 let g:neocomplete#force_overwrite_completefunc = 1
-let g:neocomplete#force_omni_input_patterns.c = '[^.[:digit:] *\t]\%(\.\|->\)\w*'
-let g:neocomplete#force_omni_input_patterns.cpp = '[^.[:digit:] *\t]\%(\.\|->\)\w*\|\h\w*::\w*'
-
-
-" Set include path
-let g:neocomplete#include_paths = {
-    \ 'cpp'  : '.,/usr/include,/usr/local/include',
-    \ 'c'    : '.,/usr/include,/usr/local/include',
-    \ 'ruby' : '.,/usr/lib/ruby/2.2.0/',
-    \ }
-
-" Set include pattern
-let g:neocomplete#include_patterns = {
-    \ 'c' : '^\s*#\s*include',
-    \ 'cpp' : '^\s*#\s*include',
-    \ 'ruby' : '^\s*require',
-    \ }
-
-" Set include dist file pattern
-let g:neocomplete#include_exprs = {
-    \ 'ruby' : substitute(v:fname,'::','/','g')
-    \ }
-
-" Set include file suffixes
-let g:neocomplete#include_suffixes = {
-  \ 'ruby' : '.rb',
-  \ 'haskell' : '.hs'
-  \ }
-
+let g:neocomplete#force_omni_input_patterns.c =
+      \ '[^.[:digit:] *\t]\%(\.\|->\)\w*'
+let g:neocomplete#force_omni_input_patterns.cpp =
+      \ '[^.[:digit:] *\t]\%(\.\|->\)\w*\|\h\w*::\w*'
 " }}}
 
-" neosnippet {{{
-"===============
-imap <C-k> <Plug>(neosnippet_expand_or_jump)
-smap <C-k> <Plug>(neosnippet_expand_or_jump)
+" 'Shougo/deoplete.nvim' {{{
+let g:deoplete#enable_at_startup = 1
 
-let s:snippet_direction = '~/.vim/snippet/'
-let g:neosnippet#snippets_directory = s:snippet_direction
-" }}}
+if !exists('g:deoplete#force_omni_input_patterns')
+  let g:deoplete#force_omni_input_patterns = {} 
+endif
+let g:deoplete#force_overwrite_completefunc = 1
+let g:deoplete#force_omni_input_patterns.c =
+      \ '[^.[:digit:] *\t]\%(\.\|->\)\w*'
+let g:deoplete#force_omni_input_patterns.cpp =
+      \ '[^.[:digit:] *\t]\%(\.\|->\)\w*\|\h\w*::\w*'
+"}}}
 
 " Unite {{{
-"==========
 let g:unite_enable_start_insert=1
 noremap <C-P> :Unite buffer<CR>
 noremap <C-N> :Unite -buffer-name=file file<CR>
@@ -265,18 +163,6 @@ au FileType unite nnoremap <silent> <buffer> <expr> <C-J> unite#do_action('split
 au FileType unite inoremap <silent> <buffer> <expr> <C-J> unite#do_action('split')
 au FileType unite nnoremap <silent> <buffer> <expr> <C-K> unite#do_action('vsplit')
 au FileType unite inoremap <silent> <buffer> <expr> <C-K> unite#do_action('vsplit')
-
-let g:giti_git_command = executable('hub') ? 'hub' : 'git'
-nnoremap <silent>gm :Gcommit<CR>
-nnoremap <silent>gM :Gcommit --amend<CR>
-nnoremap <silent>gb :Gblame<CR>
-nnoremap <silent>gB :Gbrowse<CR>
-
-let g:fugitive_git_executable = executable('hub') ? 'hub' : 'git'
-nnoremap <silent>gs :Unite giti/status -horizontal<CR>
-nnoremap <silent>gl :Unite giti/log -horizontal<CR>
-nnoremap <silent>gs :Unite giti/status -horizontal<CR>
-nnoremap <silent>gh :Unite giti/branch_all<CR>
 
 augroup UniteCommand
   autocmd!
@@ -294,68 +180,39 @@ endfunction"}}}
 
 let s:unite_hooks = {}
 
-function! s:unite_hooks.giti_status() "{{{
-  nnoremap <silent><buffer><expr>gM unite#do_action('ammend')
-  nnoremap <silent><buffer><expr>gm unite#do_action('commit')
-  nnoremap <silent><buffer><expr>ga unite#do_action('stage')
-  nnoremap <silent><buffer><expr>gc unite#do_action('checkout')
-  nnoremap <silent><buffer><expr>gd unite#do_action('diff')
-  nnoremap <silent><buffer><expr>gu unite#do_action('unstage')
-endfunction "}}}
-
-function! s:unite_hooks.giti_branch() "{{{
-  nnoremap <silent><buffer><expr>d unite#do_action('delete')
-  nnoremap <silent><buffer><expr>D unite#do_action('delete_force')
-  nnoremap <silent><buffer><expr>rd unite#do_action('delete_remote')
-  nnoremap <silent><buffer><expr>rD unite#do_action('delete_remote_force')
-endfunction "}}}
-
-function! s:unite_hooks.giti_branch_all() "{{{
-  call self.giti_branch()
-endfunction "}}}
 " }}}
 
 " vim-altr {{{
-"==============
 noremap <F3> <Plug>(altr-forward)
 noremap <F2> <Plug>(altr-back)
 " }}}
 
+" vim-parenmatch {{{
+let g:loaded_matchparen = 1 " vim標準のプラグインの無効化
+" }}}
+
 " indentLine {{{
-"===============
 let g:indentLine_color_term = 111
 let g:indentLine_color_gui = '#708090'
 " }}}
 
-" vim-quickrun {{{
-"=================
-let g:quickrun_config = {
-\   "_" : {
-\       "runner" : "vimproc",
-\       "runner/vimproc/updatetime" : 60,
-\       "outputter/buffer/split" : ":botright",
-\       "outputter/buffer/close_on_empty" : 1
-\   },
-\   "cpp" : {
-\       "cmdopt" : "-std=gnu++1y -W -Wall"
-\   },
-\}
-
-"<C-c>の強制終了．quickrun未実行ならば，そのまま通す
-nnoremap <expr><silent> <C-c> quickrun#is_running() ? quickrun#sweep_sessions() : "\<C-c>"
+" TeX {{{
+let g:tex_conceal='' " texのconcealを無効化（#^ω^）
 " }}}
 
-" vim-clang {{{
-"===============
-" disable auto completion for vim-clang
-let g:clang_auto = 0
+" vim-clang-format.vim {{{
+let g:clang_format#code_style = "LLVM"
+let g:clang_format#style_options = {
+    \ "AccessModifierOffset": -4,
+    \ "AllowShortBlocksOnASingleLine": "true",
+    \ "AllowShortIfStatementsOnASingleLine": "true",
+    \ "AlwaysBreakTemplateDeclarations": "true",
+    \ "BreakBeforeBraces": "Stroustrup",
+    \ "IndentWidth": 4,
+    \ }
 
-" default 'longest' can not work with neocomplete
-let g:clang_c_completeopt   = 'menuone,preview'
-let g:clang_cpp_completeopt = 'menuone,preview'
-
-let g:clang_exec = 'clang-svn'
-let g:clang_c_options = '-std=c11'
-let g:clang_cpp_options = '-std=c++1z -stdlib=libc++ --pedantic-errors'
+" map to <Leader>cf in C++ code
+autocmd FileType c,cpp,objc nnoremap <buffer><Leader>cf :<C-u>ClangFormat<CR>
+autocmd FileType c,cpp,objc vnoremap <buffer><Leader>cf :ClangFormat<CR>
 " }}}
 
