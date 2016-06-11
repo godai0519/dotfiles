@@ -71,10 +71,7 @@ let s:dein_repo = s:dein_dir . '/repos/github.com/Shougo/dein.vim'
 if !isdirectory(s:dein_repo)
     execute '!git clone https://github.com/Shougo/dein.vim' s:dein_repo
 endif
-
-if has('vim_starting')
-    execute 'set runtimepath^=' . fnamemodify(s:dein_repo, ':p')
-endif
+execute 'set runtimepath^=' . fnamemodify(s:dein_repo, ':p')
 
 " TOML {{{
 " プラグインリストを収めた TOML ファイル
@@ -83,7 +80,7 @@ let s:toml      = s:toml_dir . '/dein.toml'
 let s:toml_lazy = s:toml_dir . '/dein_lazy.toml'
 
 if dein#load_state(s:dein_dir)
-    call dein#begin(s:dein_dir)
+    call dein#begin(s:dein_dir, [s:toml, s:toml_lazy])
     call dein#load_toml(s:toml,      {'lazy': 0})
     call dein#load_toml(s:toml_lazy, {'lazy': 1})
     call dein#end()
@@ -93,7 +90,7 @@ endif
 
 
 " 未インストールのプラグインをインストール
-if dein#check_install()
+if dein#check_install() && has('vim_starting')
     call dein#install()
 endif
 
@@ -140,18 +137,18 @@ let g:neocomplete#force_omni_input_patterns.cpp =
       \ '[^.[:digit:] *\t]\%(\.\|->\)\w*\|\h\w*::\w*'
 " }}}
 
-" 'Shougo/deoplete.nvim' {{{
-let g:deoplete#enable_at_startup = 1
-
-if !exists('g:deoplete#force_omni_input_patterns')
-  let g:deoplete#force_omni_input_patterns = {} 
-endif
-let g:deoplete#force_overwrite_completefunc = 1
-let g:deoplete#force_omni_input_patterns.c =
-      \ '[^.[:digit:] *\t]\%(\.\|->\)\w*'
-let g:deoplete#force_omni_input_patterns.cpp =
-      \ '[^.[:digit:] *\t]\%(\.\|->\)\w*\|\h\w*::\w*'
-"}}}
+"" 'Shougo/deoplete.nvim' {{{
+"let g:deoplete#enable_at_startup = 1
+"
+"if !exists('g:deoplete#force_omni_input_patterns')
+"  let g:deoplete#force_omni_input_patterns = {} 
+"endif
+"let g:deoplete#force_overwrite_completefunc = 1
+"let g:deoplete#force_omni_input_patterns.c =
+"      \ '[^.[:digit:] *\t]\%(\.\|->\)\w*'
+"let g:deoplete#force_omni_input_patterns.cpp =
+"      \ '[^.[:digit:] *\t]\%(\.\|->\)\w*\|\h\w*::\w*'
+""}}}
 
 " Unite {{{
 let g:unite_enable_start_insert=1

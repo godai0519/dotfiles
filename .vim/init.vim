@@ -1,0 +1,1 @@
+/home/godai_0519/.vimrc

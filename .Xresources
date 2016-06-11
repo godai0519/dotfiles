@@ -1,45 +1,49 @@
 ! General
 URxvt.depth: 32
 URxvt.termName: rxvt
+!URxvt.termName: xterm-256color
 URxvt.scrollBar: false
 URxvt.saveLines: 65535
 URxvt.transparent: false
-URxvt.internalBorder: 0
+URxvt.internalBorder: 3
+URxvt.modifier: alt
+
+URxvt.cursorBlink: true
+URxvt.cursorColor: #657b83
+URxvt.cursorUnderline: false
 
 ! Appearance
 URxvt.font: xft:Ricty-Regular:size=12:antialias=true
 URxvt.boldFont: xft:Ricty-Bold:size=12:antialias=true
+URxvt.allow_bold: true
 URxvt.foreground: rgba:ffff/ffff/ffff/ffff
 URxvt.background: rgba:0000/0000/0000/cccc
 
 URxvt.color4:  #5566ff
 URxvt.color12: #7799ff
 
-URxvt.modifier: alt
-URxvt.preeditType: OnTheSpot 
-URxvt.perl-ext: xim-onthespot
+URxvt.inputMethod: fcitx
+URxvt.preeditType: OnTheSpot
 
-!
 ! Ext
-!
-URxvt.perl-ext-common: default,clipboard,url-select,tabbedex,vtwheel
+URxvt.perl-ext-common: default,xim-onthespot,tabbedex,clipboard,url-select
+
+! TabbedEx
+URxvt.tabbed.new-button: true
+URxvt.tabbed.tabbar-fg: 2
+URxvt.tabbed.tabbar-bg: #001020
+URxvt.tabbed.tab-fg:    3
+URxvt.tabbed.tab-bg:    #001020
 
 ! clipboard
-URxvt.keysym.Meta-c: perl:clipboard:copy
-URxvt.keysym.Meta-v: perl:clipboard:paste
+URxvt.keysym.M-c: perl:clipboard:copy
+URxvt.keysym.M-v: perl:clipboard:paste
 
 ! URL-Select
-URxvt.keysym.M-u: perl:url-select:select_nexta
+URxvt.keysym.M-u: perl:url-select:select_next
 URxvt.url-select.launcher: /usr/bin/opera
 URxvt.url-select.underline: true
 URxvt.colorUL: #4682B4
-
-! tabbedex
-URxvt.tabbed.autohide: true
-URxvt.keysym.Control-t: perl:tabbedex:new_tab
-URxvt.keysym.Control-Tab: perl:tabbedex:next_tab
-URxvt.keysym.Control-Shift-Tab: perl:tabbedex:prev_tab
-URxvt.keysym.Control-Shift-R: perl:tabbedex:rename_tab
 
 !
 ! awesome
