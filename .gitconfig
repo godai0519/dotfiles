@@ -30,6 +30,9 @@
     show = diff-highlight | less
     diff = diff-highlight | less
 
+[diff]
+    compactionHeuristic = true
+
 [alias]
     st = status
     sh = show
