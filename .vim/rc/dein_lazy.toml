@@ -52,3 +52,17 @@ repo = 'Shougo/context_filetype.vim'
 [[plugins]]
 repo = 'kana/vim-altr'
 
+[[plugins]]
+repo = 'tpope/vim-fugitive'
+
+[[plugins]]
+repo = 'airblade/vim-gitgutter'
+
+[[plugins]]
+repo = 'scrooloose/syntastic'
+on_ft = 'cpp'
+hook_source = '''
+ let g:syntastic_cpp_compiler="g++"
+ let g:syntastic_cpp_compiler_option="-std=c++1z"
+'''
+

@@ -40,5 +40,6 @@ repo = 'moznion/hateblo.vim'
 depends = 'webapi-vim'
 
 [[plugins]]
-repo = 'tpope/vim-fugitive'
+repo = 'itchyny/lightline.vim'
+depends = ['vim-fugitive', 'vim-gitgutter']
 
