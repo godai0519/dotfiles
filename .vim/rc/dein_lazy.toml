@@ -1,35 +1,26 @@
 [[plugins]]
-repo = 'Shougo/neocomplete.vim'
+repo = 'Shougo/deoplete.nvim'
 depends = 'context_filetype.vim'
-if = "has('lua')"
-on_event = 'InsertEnter'
+if = "has('nvim')"
+on_i = 1
 hook_source = '''
-  let g:neocomplete#enable_at_startup = 1
-#  source ~/.vim/rc/plugins/neocomplete.rc.vim
+  let g:deoplete#enable_at_startup = 1
+#  source ~/.vim/rc/plugins/deoplete.rc.vim
 '''
 
-#[[plugins]]
-#repo = 'zchee/deoplete-clang'
-#on_ft = ['c', 'cpp']
-#
-#[[plugins]]
-#repo = 'zchee/deoplete-jedi'
-#on_ft = 'python'
-#
-#[[plugins]]
-#repo = 'zchee/deoplete-go'
-#on_i = 1
-#on_ft = 'go'
-#
-#[[plugins]]
-#repo = 'Shougo/deoplete.nvim'
-#depends = 'context_filetype.vim'
-#if = "has('nvim')"
-#on_i = 1
-#hook_source = '''
-#  let g:deoplete#enable_at_startup = 1
-##  source ~/.vim/rc/plugins/deoplete.rc.vim
-#'''
+[[plugins]]
+repo = 'zchee/deoplete-clang'
+on_ft = ['c', 'cpp']
+
+[[plugins]]
+repo = 'zchee/deoplete-jedi'
+on_ft = 'python'
+
+[[plugins]]
+repo = 'zchee/deoplete-go'
+on_i = 1
+on_ft = 'go'
+
 
 [[plugins]]
 repo = 'Shougo/neosnippet.vim'
@@ -65,4 +56,10 @@ hook_source = '''
  let g:syntastic_cpp_compiler="g++"
  let g:syntastic_cpp_compiler_option="-std=c++1z"
 '''
+
+[[plugins]]
+repo = 'lervag/vimtex'
+depends = 'vim-quickrun'
+on_ft = 'tex'
+
 

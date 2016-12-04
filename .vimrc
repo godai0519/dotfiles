@@ -188,31 +188,31 @@ let g:clang_cpp_options = '-std=c++1z -stdlib=libstdc++'
 
 " }}}
 
-" 'Shougo/neocomplete.vim' {{{
-let g:neocomplete#enable_at_startup = 1
-
-if !exists('g:neocomplete#force_omni_input_patterns')
-  let g:neocomplete#force_omni_input_patterns = {} 
-endif
-let g:neocomplete#force_overwrite_completefunc = 1
-let g:neocomplete#force_omni_input_patterns.c =
-      \ '[^.[:digit:] *\t]\%(\.\|->\)\w*'
-let g:neocomplete#force_omni_input_patterns.cpp =
-      \ '[^.[:digit:] *\t]\%(\.\|->\)\w*\|\h\w*::\w*'
-" }}}
-
-"" 'Shougo/deoplete.nvim' {{{
-"let g:deoplete#enable_at_startup = 1
+"" 'Shougo/neocomplete.vim' {{{
+"let g:neocomplete#enable_at_startup = 1
 "
-"if !exists('g:deoplete#force_omni_input_patterns')
-"  let g:deoplete#force_omni_input_patterns = {} 
+"if !exists('g:neocomplete#force_omni_input_patterns')
+"  let g:neocomplete#force_omni_input_patterns = {} 
 "endif
-"let g:deoplete#force_overwrite_completefunc = 1
-"let g:deoplete#force_omni_input_patterns.c =
+"let g:neocomplete#force_overwrite_completefunc = 1
+"let g:neocomplete#force_omni_input_patterns.c =
 "      \ '[^.[:digit:] *\t]\%(\.\|->\)\w*'
-"let g:deoplete#force_omni_input_patterns.cpp =
+"let g:neocomplete#force_omni_input_patterns.cpp =
 "      \ '[^.[:digit:] *\t]\%(\.\|->\)\w*\|\h\w*::\w*'
-""}}}
+"" }}}
+
+" 'Shougo/deoplete.nvim' {{{
+let g:deoplete#enable_at_startup = 1
+
+if !exists('g:deoplete#force_omni_input_patterns')
+  let g:deoplete#force_omni_input_patterns = {} 
+endif
+let g:deoplete#force_overwrite_completefunc = 1
+let g:deoplete#force_omni_input_patterns.c =
+      \ '[^.[:digit:] *\t]\%(\.\|->\)\w*'
+let g:deoplete#force_omni_input_patterns.cpp =
+      \ '[^.[:digit:] *\t]\%(\.\|->\)\w*\|\h\w*::\w*'
+"}}}
 
 " Unite {{{
 let g:unite_enable_start_insert=1
@@ -276,4 +276,10 @@ let g:clang_format#style_options = {
 autocmd FileType c,cpp,objc nnoremap <buffer><Leader>cf :<C-u>ClangFormat<CR>
 autocmd FileType c,cpp,objc vnoremap <buffer><Leader>cf :ClangFormat<CR>
 " }}}
+
+imap <C-k> <Plug>(neosnippet_expand_or_jump)
+smap <C-k> <Plug>(neosnippet_expand_or_jump)
+
+let g:quickrun_config = {}
+
 
