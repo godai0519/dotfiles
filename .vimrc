@@ -1,9 +1,9 @@
 " Encoding {{{
 "=============
-scriptencoding utf-8
 set encoding=utf-8
 set fileencoding=utf-8
 set fileencodings=ucs-bom,utf-8,iso-2022-jp,sjis,cp932,euc-jp,cp20932
+scriptencoding utf-8
 " }}}
 
 " 基本設定 {{{
@@ -121,24 +121,24 @@ let g:lightline = {
       \ }
 
 function! LightLineModified()
-  return &ft =~ 'help\|vimfiler\|gundo' ? '' : &modified ? '+' : &modifiable ? '' : '-'
+  return &ft =~# 'help\|vimfiler\|gundo' ? '' : &modified ? '+' : &modifiable ? '' : '-'
 endfunction
 
 function! LightLineReadonly()
-  return &ft !~? 'help\|vimfiler\|gundo' && &readonly ? '⭤' : ''
+  return &ft !~# 'help\|vimfiler\|gundo' && &readonly ? '⭤' : ''
 endfunction
 
 function! LightLineFilename()
-  return ('' != LightLineReadonly() ? LightLineReadonly() . ' ' : '') .
-        \ (&ft == 'vimfiler' ? vimfiler#get_status_string() :
-        \  &ft == 'unite' ? unite#get_status_string() :
-        \  &ft == 'vimshell' ? vimshell#get_status_string() :
-        \ '' != expand('%:t') ? expand('%:t') : '[No Name]') .
-        \ ('' != LightLineModified() ? ' ' . LightLineModified() : '')
+  return ('' !=# LightLineReadonly() ? LightLineReadonly() . ' ' : '') .
+        \ (&ft ==# 'vimfiler' ? vimfiler#get_status_string() :
+        \  &ft ==# 'unite' ? unite#get_status_string() :
+        \  &ft ==# 'vimshell' ? vimshell#get_status_string() :
+        \ '' !=# expand('%:t') ? expand('%:t') : '[No Name]') .
+        \ ('' !=# LightLineModified() ? ' ' . LightLineModified() : '')
 endfunction
 
 function! LightLineFugitive()
-  if &ft !~? 'vimfiler\|gundo' && exists("*fugitive#head")
+  if &ft !~? 'vimfiler\|gundo' && exists('*fugitive#head')
     let branch = fugitive#head()
     return branch !=# '' ? '⭠ '.branch : ''
   endif
@@ -188,18 +188,18 @@ let g:clang_cpp_options = '-std=c++1z -stdlib=libstdc++'
 
 " }}}
 
-"" 'Shougo/neocomplete.vim' {{{
-"let g:neocomplete#enable_at_startup = 1
-"
-"if !exists('g:neocomplete#force_omni_input_patterns')
-"  let g:neocomplete#force_omni_input_patterns = {} 
-"endif
-"let g:neocomplete#force_overwrite_completefunc = 1
-"let g:neocomplete#force_omni_input_patterns.c =
-"      \ '[^.[:digit:] *\t]\%(\.\|->\)\w*'
-"let g:neocomplete#force_omni_input_patterns.cpp =
-"      \ '[^.[:digit:] *\t]\%(\.\|->\)\w*\|\h\w*::\w*'
-"" }}}
+" 'Shougo/neocomplete.vim' {{{
+let g:neocomplete#enable_at_startup = 1
+
+if !exists('g:neocomplete#force_omni_input_patterns')
+  let g:neocomplete#force_omni_input_patterns = {} 
+endif
+let g:neocomplete#force_overwrite_completefunc = 1
+let g:neocomplete#force_omni_input_patterns.c =
+      \ '[^.[:digit:] *\t]\%(\.\|->\)\w*'
+let g:neocomplete#force_omni_input_patterns.cpp =
+      \ '[^.[:digit:] *\t]\%(\.\|->\)\w*\|\h\w*::\w*'
+" }}}
 
 " 'Shougo/deoplete.nvim' {{{
 let g:deoplete#enable_at_startup = 1
@@ -215,31 +215,17 @@ let g:deoplete#force_omni_input_patterns.cpp =
 "}}}
 
 " Unite {{{
-let g:unite_enable_start_insert=1
-noremap <C-P> :Unite buffer<CR>
-noremap <C-N> :Unite -buffer-name=file file<CR>
-noremap <C-Z> :Unite file_mru<CR>
+nnoremap [unite]  <Nop>
+nmap     <Space>u [unite]
 
-au FileType unite nnoremap <silent> <buffer> <expr> <C-J> unite#do_action('split')
-au FileType unite inoremap <silent> <buffer> <expr> <C-J> unite#do_action('split')
-au FileType unite nnoremap <silent> <buffer> <expr> <C-K> unite#do_action('vsplit')
-au FileType unite inoremap <silent> <buffer> <expr> <C-K> unite#do_action('vsplit')
-
-augroup UniteCommand
-  autocmd!
-  autocmd FileType unite call <SID>unite_settings()
-augroup END
-
-function! s:unite_settings() "{{{
-  for source in unite#get_current_unite().sources
-    let source_name = substitute(source.name, '[-/]', '_', 'g')
-    if !empty(source_name) && has_key(s:unite_hooks, source_name)
-      call s:unite_hooks[source_name]()
-    endif
-  endfor
-endfunction"}}}
-
-let s:unite_hooks = {}
+let g:unite_source_history_yank_enable=1
+nnoremap <silent> [unite]u :<C-u>Unite<Space>file<CR>
+nnoremap <silent> [unite]m :<C-u>Unite<Space>file_mru<CR>
+nnoremap <silent> [unite]f :<C-u>Unite<Space>buffer<CR>
+nnoremap <silent> [unite]g :<C-u>Unite<Space>grep<CR>
+nnoremap <silent> [unite]h :<C-u>Unite<Space>history/yank<CR>
+nnoremap <silent> [unite]b :<C-u>Unite<Space>bookmark<CR>
+nnoremap <silent> [unite]a :<C-u>UniteBookmarkAdd<CR>
 
 " }}}
 
@@ -262,20 +248,28 @@ let g:tex_conceal='' " texのconcealを無効化（#^ω^）
 " }}}
 
 " vim-clang-format.vim {{{
-let g:clang_format#code_style = "LLVM"
+let g:clang_format#code_style = 'LLVM'
 let g:clang_format#style_options = {
-    \ "AccessModifierOffset": -4,
-    \ "AllowShortBlocksOnASingleLine": "true",
-    \ "AllowShortIfStatementsOnASingleLine": "true",
-    \ "AlwaysBreakTemplateDeclarations": "true",
-    \ "BreakBeforeBraces": "Stroustrup",
-    \ "IndentWidth": 4,
+    \ 'AccessModifierOffset': -4,
+    \ 'AllowShortBlocksOnASingleLine': 'true',
+    \ 'AllowShortIfStatementsOnASingleLine': 'true',
+    \ 'AlwaysBreakTemplateDeclarations': 'true',
+    \ 'BreakBeforeBraces': 'Stroustrup',
+    \ 'IndentWidth': 4,
     \ }
 
 " map to <Leader>cf in C++ code
-autocmd FileType c,cpp,objc nnoremap <buffer><Leader>cf :<C-u>ClangFormat<CR>
-autocmd FileType c,cpp,objc vnoremap <buffer><Leader>cf :ClangFormat<CR>
+augroup clang_format
+    autocmd!
+    autocmd FileType c,cpp,objc nnoremap <buffer><Leader>cf :<C-u>ClangFormat<CR>
+    autocmd FileType c,cpp,objc vnoremap <buffer><Leader>cf :ClangFormat<CR>
+augroup END
 " }}}
+
+nnoremap <silent> <Space>e :<C-u>tabedit $MYVIMRC<CR>
+nnoremap <silent> <Space>E :<C-u>source $MYVIMRC<CR>
+
+nnoremap <ESC><ESC> :nohlsearch<CR>
 
 imap <C-k> <Plug>(neosnippet_expand_or_jump)
 smap <C-k> <Plug>(neosnippet_expand_or_jump)
