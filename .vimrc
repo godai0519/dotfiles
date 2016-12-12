@@ -214,6 +214,13 @@ let g:deoplete#force_omni_input_patterns.cpp =
       \ '[^.[:digit:] *\t]\%(\.\|->\)\w*\|\h\w*::\w*'
 "}}}
 
+" Neosnippet {{{
+imap <C-k> <Plug>(neosnippet_expand_or_jump)
+smap <C-k> <Plug>(neosnippet_expand_or_jump)
+let g:neosnippet#snippets_directory = '~/.vim/snippets/'
+" }}}
+
+
 " Unite {{{
 nnoremap [unite]  <Nop>
 nmap     <Space>u [unite]
@@ -271,8 +278,6 @@ nnoremap <silent> <Space>E :<C-u>source $MYVIMRC<CR>
 
 nnoremap <ESC><ESC> :nohlsearch<CR>
 
-imap <C-k> <Plug>(neosnippet_expand_or_jump)
-smap <C-k> <Plug>(neosnippet_expand_or_jump)
 
 let g:quickrun_config = {}
 
