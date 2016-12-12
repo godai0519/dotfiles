@@ -64,8 +64,9 @@ repo = 'airblade/vim-gitgutter'
 repo = 'scrooloose/syntastic'
 on_ft = 'cpp'
 hook_source = '''
- let g:syntastic_cpp_compiler="g++"
- let g:syntastic_cpp_compiler_option="-std=c++1z"
+ let g:syntastic_cpp_compiler = 'clang++'
+ let g:syntastic_cpp_compiler_options = '-std=c++1z'
+ let g:syntastic_cpp_check_header = 1
 '''
 
 [[plugins]]

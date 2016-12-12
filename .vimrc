@@ -184,7 +184,7 @@ let g:clang_cpp_completeopt = 'menuone'
 let g:clang_exec = 'clang'
 let g:clang_format_exec = 'clang-format'
 let g:clang_c_options = '-std=c11'
-let g:clang_cpp_options = '-std=c++1z -stdlib=libstdc++'
+let g:clang_cpp_options = '-std=c++1z'
 
 " }}}
 
