@@ -64,14 +64,15 @@ au BufRead,BufNewFile *.md set filetype=markdown
 
 " dein {{{
 "===============
-let s:dein_dir = expand('~/.vim/dein')
+let s:cache_home = expand('~/.cache')
+let s:dein_dir = s:cache_home . '/dein'
 let s:dein_repo = s:dein_dir . '/repos/github.com/Shougo/dein.vim'
 
 " deinがなければclone
 if !isdirectory(s:dein_repo)
-    execute '!git clone https://github.com/Shougo/dein.vim' s:dein_repo
+    execute system('git clone https://github.com/Shougo/dein.vim' . ' ' . shellescape(s:dein_repo))
 endif
-execute 'set runtimepath^=' . fnamemodify(s:dein_repo, ':p')
+let &runtimepath = s:dein_repo . ',' . &runtimepath
 
 " TOML {{{
 " プラグインリストを収めた TOML ファイル
@@ -80,7 +81,7 @@ let s:toml      = s:toml_dir . '/dein.toml'
 let s:toml_lazy = s:toml_dir . '/dein_lazy.toml'
 
 if dein#load_state(s:dein_dir)
-    call dein#begin(s:dein_dir, [s:toml, s:toml_lazy])
+    call dein#begin(s:dein_dir, [$MYVIMRC, s:toml, s:toml_lazy])
     call dein#load_toml(s:toml,      {'lazy': 0})
     call dein#load_toml(s:toml_lazy, {'lazy': 1})
     call dein#end()
@@ -88,14 +89,14 @@ if dein#load_state(s:dein_dir)
 endif
 " }}}
 
-
 " 未インストールのプラグインをインストール
-if dein#check_install() && has('vim_starting')
+if has('vim_starting') && dein#check_install()
     call dein#install()
 endif
 
 " プラグインロードできたので有効化
 filetype plugin indent on
+syntax enable
 " }}}
 
 " lightline {{{
@@ -131,7 +132,7 @@ endfunction
 function! LightLineFilename()
   return ('' !=# LightLineReadonly() ? LightLineReadonly() . ' ' : '') .
         \ (&ft ==# 'vimfiler' ? vimfiler#get_status_string() :
-        \  &ft ==# 'unite' ? unite#get_status_string() :
+        \  &ft ==# 'denite' ? denite#get_status_string() :
         \  &ft ==# 'vimshell' ? vimshell#get_status_string() :
         \ '' !=# expand('%:t') ? expand('%:t') : '[No Name]') .
         \ ('' !=# LightLineModified() ? ' ' . LightLineModified() : '')
@@ -221,18 +222,18 @@ let g:neosnippet#snippets_directory = '~/.vim/snippets/'
 " }}}
 
 
-" Unite {{{
-nnoremap [unite]  <Nop>
-nmap     <Space>u [unite]
+" Denite {{{
+nnoremap [denite]  <Nop>
+nmap     <Space>u [denite]
 
-let g:unite_source_history_yank_enable=1
-nnoremap <silent> [unite]u :<C-u>Unite<Space>file<CR>
-nnoremap <silent> [unite]m :<C-u>Unite<Space>file_mru<CR>
-nnoremap <silent> [unite]f :<C-u>Unite<Space>buffer<CR>
-nnoremap <silent> [unite]g :<C-u>Unite<Space>grep<CR>
-nnoremap <silent> [unite]h :<C-u>Unite<Space>history/yank<CR>
-nnoremap <silent> [unite]b :<C-u>Unite<Space>bookmark<CR>
-nnoremap <silent> [unite]a :<C-u>UniteBookmarkAdd<CR>
+let g:denite_source_history_yank_enable=1
+nnoremap <silent> [denite]u :<C-u>Denite<Space>file<CR>
+nnoremap <silent> [denite]m :<C-u>Denite<Space>file_mru<CR>
+nnoremap <silent> [denite]f :<C-u>Denite<Space>buffer<CR>
+nnoremap <silent> [denite]g :<C-u>Denite<Space>grep<CR>
+nnoremap <silent> [denite]h :<C-u>Denite<Space>history/yank<CR>
+nnoremap <silent> [denite]b :<C-u>Denite<Space>bookmark<CR>
+nnoremap <silent> [denite]a :<C-u>DeniteBookmarkAdd<CR>
 
 " }}}
 
@@ -271,14 +272,46 @@ augroup clang_format
     autocmd FileType c,cpp,objc nnoremap <buffer><Leader>cf :<C-u>ClangFormat<CR>
     autocmd FileType c,cpp,objc vnoremap <buffer><Leader>cf :ClangFormat<CR>
 augroup END
-" }}}
+ " }}}
 
 nnoremap <silent> <Space>e :<C-u>tabedit $MYVIMRC<CR>
 nnoremap <silent> <Space>E :<C-u>source $MYVIMRC<CR>
 
-nnoremap <ESC><ESC> :nohlsearch<CR>
-
-
 let g:quickrun_config = {}
 
+highlight CursorLine cterm=underline ctermfg=NONE ctermbg=NONE
+hi clear CursorLine
+
+
+" 'cursorline' を必要な時にだけ有効にする
+" http://d.hatena.ne.jp/thinca/20090530/1243615055
+augroup vimrc_auto_cursorline
+  autocmd!
+  autocmd CursorMoved,CursorMovedI * call s:auto_cursorline('CursorMoved')
+  autocmd CursorHold,CursorHoldI * call s:auto_cursorline('CursorHold')
+  autocmd WinEnter * call s:auto_cursorline('WinEnter')
+  autocmd WinLeave * call s:auto_cursorline('WinLeave')
+
+  let s:cursorline_lock = 0
+  function! s:auto_cursorline(event)
+    if a:event ==# 'WinEnter'
+      setlocal cursorline
+      let s:cursorline_lock = 2
+    elseif a:event ==# 'WinLeave'
+      setlocal nocursorline
+    elseif a:event ==# 'CursorMoved'
+      if s:cursorline_lock
+        if 1 < s:cursorline_lock
+          let s:cursorline_lock = 1
+        else
+          setlocal nocursorline
+          let s:cursorline_lock = 0
+        endif
+      endif
+    elseif a:event ==# 'CursorHold'
+      setlocal cursorline
+      let s:cursorline_lock = 1
+    endif
+  endfunction
+augroup END
 

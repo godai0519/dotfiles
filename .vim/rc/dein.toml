@@ -43,13 +43,21 @@ depends = 'webapi-vim'
 repo = 'itchyny/lightline.vim'
 depends = ['vim-fugitive', 'vim-gitgutter']
 
-[[plugin]]
+[[plugins]]
 repo = 'itchyny/vim-parenmatch'
 hook_source = '''
   let g:loaded_matchparen = 1
 '''
 
-[[plugin]]
+[[plugins]]
 repo = 'itchyny/vim-cursorword'
+hook_source = '''
+  let g:loaded_matchparen = 1
+'''
 
+[[plugins]]
+repo = 'yuttie/comfortable-motion.vim'
+hook_source = '''
+  let g:comfortable_motion_no_default_key_mappings = 1
+'''
 

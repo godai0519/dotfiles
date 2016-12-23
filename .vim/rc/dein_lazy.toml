@@ -5,7 +5,6 @@ if = "has('nvim')"
 on_i = 1
 hook_source = '''
   let g:deoplete#enable_at_startup = 1
-#  source ~/.vim/rc/plugins/deoplete.rc.vim
 '''
 
 [[plugins]]
@@ -15,9 +14,7 @@ if = "!has('nvim')"
 on_i = 1
 hook_source = '''
   let g:neocomplete#enable_at_startup = 1
-#  source ~/.vim/rc/plugins/deoplete.rc.vim
 '''
-
 
 [[plugins]]
 repo = 'zchee/deoplete-clang'
@@ -32,7 +29,6 @@ repo = 'zchee/deoplete-go'
 on_i = 1
 on_ft = 'go'
 
-
 [[plugins]]
 repo = 'Shougo/neosnippet.vim'
 depends = ['neosnippet-snippets', 'context_filetype.vim']
@@ -44,7 +40,7 @@ repo = 'Shougo/neomru.vim'
 on_if = 1
 
 [[plugins]]
-repo = 'Shougo/unite.vim'
+repo = 'Shougo/denite.nvim'
 depends = 'neomru.vim'
 
 [[plugins]]
@@ -72,5 +68,4 @@ hook_source = '''
 repo = 'lervag/vimtex'
 depends = 'vim-quickrun'
 on_ft = 'tex'
-
 
