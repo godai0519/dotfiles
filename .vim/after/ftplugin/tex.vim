@@ -1,11 +1,15 @@
-" LaTeX Quickrun
+if !exists("g:quickrun_config")
+  let g:quickrun_config = {}
+endif
+
+"XeLaTeX Quickrun
 let g:quickrun_config['tex'] = {
 \ 'command' : 'latexmk',
 \ 'outputter' : 'error',
 \ 'outputter/error/success' : 'null',
 \ 'outputter/error/error' : 'quickfix',
 \ 'srcfile' : expand("%"),
-\ 'cmdopt': '-pdfdvi',
+\ 'cmdopt': '',
 \ 'hook/sweep/files' : [
 \                      '%S:p:r.aux',
 \                      '%S:p:r.bbl',
@@ -17,6 +21,7 @@ let g:quickrun_config['tex'] = {
 \                      '%S:p:r.out'
 \                      ],
 \ 'exec': '%c %o %a %s',
+\ 'runner' : 'vimproc',
 \}
 
 " 部分的に選択してコンパイル
@@ -24,7 +29,7 @@ let g:quickrun_config['tex'] = {
 let g:quickrun_config.tmptex = {
 \   'exec': [
 \           'mv %s %a/tmptex.latex',
-\           'latexmk -pdfdvi -pv -output-directory=%a %a/tmptex.latex',
+\           'latexmk -pv -output-directory=%a %a/tmptex.latex',
 \           ],
 \   'args' : expand("%:p:h:gs?\\\\?/?"),
 \   'outputter' : 'error',

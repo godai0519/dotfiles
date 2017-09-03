@@ -185,7 +185,7 @@ let g:clang_cpp_completeopt = 'menuone'
 let g:clang_exec = 'clang'
 let g:clang_format_exec = 'clang-format'
 let g:clang_c_options = '-std=c11'
-let g:clang_cpp_options = '-std=c++1z'
+let g:clang_cpp_options = '-std=c++1z -stdlib=libc++'
 
 " }}}
 
@@ -276,8 +276,6 @@ augroup END
 
 nnoremap <silent> <Space>e :<C-u>tabedit $MYVIMRC<CR>
 nnoremap <silent> <Space>E :<C-u>source $MYVIMRC<CR>
-
-let g:quickrun_config = {}
 
 highlight CursorLine cterm=underline ctermfg=NONE ctermbg=NONE
 hi clear CursorLine
