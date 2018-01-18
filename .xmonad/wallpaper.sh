@@ -1,17 +1,20 @@
 #!/bin/sh
-DIR=$HOME/Dropbox/Wallpaper
-MNG_FILE=$HOME/.wallpaper/tmp.png
-SLEEP=180
+
+source `dirname $0`/lock.sh
+
+dir=$HOME/Dropbox/Wallpaper
+managed_image=$HOME/.wallpaper/tmp.png
+interval_time=180
 
 while :; do
-    NUM_JPG=`ls $DIR | wc -l`
-    TIMESTAMP=`date +%s`
-    RAND=`expr $TIMESTAMP % $NUM_JPG + 1`
-    TMP=`ls $DIR | head -$RAND | tail -1`
+    image_num=`ls -1 $dir | wc -l`
+    timestamp=`date +%s`
+    random_number=`expr $timestamp % $image_num + 1`
+    image_name=`ls -1 $dir | head -n $random_number | tail -n 1`
 
-    cp -f $DIR/$TMP $MNG_FILE
+    cp -f "$dir/$image_name" "$managed_image"
     nitrogen --restore
 
-    sleep $SLEEP;
+    sleep $interval_time;
 done
 

@@ -1,6 +1,7 @@
 import XMonad
 import XMonad.Hooks.DynamicLog
 import XMonad.Hooks.ManageDocks
+import XMonad.Hooks.SetWMName
 import XMonad.Layout.Spacing
 import XMonad.Layout.DragPane
 import XMonad.Layout.ThreeColumns
@@ -17,16 +18,25 @@ myTerminal = "urxvt"
 myModMask = mod4Mask
 myWorkspaces = ["Work", "Browse", "Others", "SNS"]
 
-myStartupHook = spawn "$HOME/.xmonad/wallpaper.sh"
+myStartupHook = do
+    spawn "$HOME/.xmonad/wallpaper.sh"
+    setWMName "LG3D"
 myLayoutHook = avoidStruts $ smartSpacing 3 $ (dragPane Vertical 0.1 0.5 ||| ThreeColMid 1 (3/100) (1/2) ||| OneBig (3/4) (3/4) ||| Grid ||| Full)
-myManageHook = manageDocks <+> manageHook defaultConfig
+myManageHookFloat = composeAll
+    [(className =? "mikutter.rb" <&&> windowName =? "mikutter_image_preview") --> doFloat
+    --[ className =? "Mikutter.rb" --> doFloat
+    ]
+    where
+        windowName = stringProperty "WM_NAME"
+        notInMonad r = return $ not r
+myManageHook = myManageHookFloat <+> manageDocks
 myLogHook h = dynamicLogWithPP myPP { ppOutput = hPutStrLn h }
 
 myAdditionalKeysP :: [([Char], X ())]
 myAdditionalKeysP =
     [  ("<XF86AudioMute>", spawn "if [ -n \"$(amixer sget Master | grep '\\[off\\]')\" ]; then amixer sset Master unmute; amixer sset PCM unmute; amixer sset Headphone unmute; amixer sset Speaker unmute; else amixer sset Master mute; amixer sset PCM mute; amixer sset Headphone mute; amixer sset Speaker mute; fi")
     , ("<XF86AudioMicMute>", spawn "amixer sset Mic toggle")
-    ,("<XF86AudioRaiseVolume>", spawn "amixer set Master 9%+")
+    , ("<XF86AudioRaiseVolume>", spawn "amixer set Master 9%+")
     , ("<XF86AudioLowerVolume>", spawn "amixer set Master 9%-")
     , ("<XF86MonBrightnessDown>", spawn "xbacklight -dec 5")
     , ("<XF86MonBrightnessUp>", spawn "xbacklight -inc 5")
@@ -51,12 +61,12 @@ myAdditionalKeysP =
     , ("M-<Return>", spawn myTerminal)
     ]
 
--- Setting of XMobar {{{
+-- Setting of XMobar {{{  
 myBar = "xmobar $HOME/.xmonad/xmobarrc"
 myPP = xmobarPP { ppTitle  = xmobarColor "white" "" . shorten 80 }
 -- }}}
 
--- Main Function {{{
+-- Main Function {{{ 
 main = xmonad . myConfig =<< spawnPipe myBar
 -- }}}
 
@@ -80,5 +90,5 @@ myConfig statusBar = defaultConfig
     }
     `additionalKeysP` myAdditionalKeysP
 -- }}}
-
+ 
 
