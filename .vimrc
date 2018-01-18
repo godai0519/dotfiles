@@ -1,103 +1,98 @@
-" Encoding {{{
-"=============
-set encoding=utf-8
-set fileencoding=utf-8
-set fileencodings=ucs-bom,utf-8,iso-2022-jp,sjis,cp932,euc-jp,cp20932
-scriptencoding utf-8
-" }}}
+function! s:source_rc(file)
+    let abspath = resolve(expand('~/.vim/rc/' . a:file))
+    if filereadable(abspath)
+        execute 'source' fnameescape(abspath)
+    endif
+endfunction
 
-" 基本設定 {{{
-"=============
-set scrolloff=5                "カーソルの上下の最低行数
-set wrap                       "行折り返し
-set breakindent                "行折り返しでインデントを考慮
-set nobackup                   "上書き時バックアップ作成禁止
-set autoread                   "書き換え時，自動で読みなおす
-set noswapfile                 "swapファイル作成禁止
-set hidden                     "保存しないで他のファイルを編集可能に
-set backspace=indent,eol,start "BSで文字を消せるように
-set clipboard=unnamed          "OSのクリップボード使用
-set ruler                      "現在地の表示
+call s:source_rc('init.vim')
+call s:source_rc('dein.vim')
+
+" ================== General Config ===================
+
 set number                     "行番号表示
-set showmatch                  "(),{}のお知らせ
-set matchtime=1                "showmatchを0.1s
-set cursorline                 "ライン強調
-set laststatus=2               "ステータスラインの設定
-set statusline=%f%m\ %{fugitive#statusline()}\ %=%l,%c\ %{'['.(&fenc!=''?&fenc:&enc).']\ ['.&fileformat.']'}
+set ruler                      "現在地の表示
+set showcmd
+set visualbell
+set autoread                   "書き換え時，自動で読みなおす
+set backspace=indent,eol,start "BSで文字を消せるように
 set nrformats=alpha,hex        "<C-a>と<C-x>での増減について，8進却下・英字許可
+set hidden                     "保存しないで他のファイルを編集可能に
+set clipboard=unnamed          "OSのクリップボード使用
 set foldmethod=marker          "markerで自動折りたたみ可能
 set pumheight=10
 
-" 不可視文字の設定
-set list
-set listchars=tab:>-,trail:_,extends:>,precedes:<,nbsp:%   "各種特殊文字の文字
-highlight JpSpace cterm=underline ctermfg=Blue guifg=Blue  "全角スペースの色
-au BufRead,BufNew * match JpSpace /　/                     "全角スペース怖い
-set display=uhex                                           "バイナリファイルの非印字可能文字を16進数で表示
-" }}}
+if has('nvim')
+    set inccommand=split
+endif
 
-" 検索設定 {{{
-"=============
+" =============== Swap / Backup Config ================
+
+set nobackup                   "上書き時バックアップ作成禁止
+set noswapfile                 "swapファイル作成禁止
+set nowb
+
+" ===================== Scrolling =====================
+
+set scrolloff=5         "カーソルの上下の最低行数
+set sidescrolloff=16    "カーソルの左右の最低行数
+set sidescroll=1        "画面の追従速度
+
+" =================== Visualization ===================
+
+set wrap                       "行折り返し
+set breakindent                "行折り返しでインデントを考慮
+
+" 強調設定
+set showmatch                  "(),{}のお知らせ
+set matchtime=1                "showmatchを0.1s
+set cursorline                 "ライン強調
+
+"バイナリファイルの非印字可能文字を16進数で表示
+set display=uhex
+
+" 不可視文字の設定
+set list listchars=tab:»-,trail:_,extends:»,precedes:«,nbsp:%
+highlight JpSpace cterm=underline ctermfg=Blue guifg=Blue
+augroup invisibleCharactorSetting
+  autocmd!
+  autocmd BufRead,BufNew * match JpSpace /　/
+augroup END
+
+" ==================== Status Line ====================
+
+set laststatus=2               "ステータスラインの設定
+set statusline=%f%m\ %{fugitive#statusline()}\ %=%l,%c\ %{'['.(&fenc!=''?&fenc:&enc).']\ ['.&fileformat.']'}
+
+" ================== Search Setting ===================
+
 set ignorecase                "小文字検索で大文字ヒット
 set smartcase                 "大文字を含む場合は厳密に
 set incsearch                 "インクリメンタルサーチ
 set nowrapscan                "
 set whichwrap=b,s,h,l,<,>,[,] "
 set history=1000              "コマンド、検索パターンを100個まで履歴に残す
-" }}}
 
-" インデント・タブスペース {{{
-"=============================
+" ========== Indentation / Tab Space Settings =========
+
 set autoindent
 set expandtab
 set shiftwidth=4
 set smartcase
 set smartindent
 set smarttab
+set softtabstop=4
 set tabstop=4
-" }}}
 
-" Extension Settings {{{
-"=======================
-au BufRead,BufNewFile *.md set filetype=markdown
-" }}}
+" Auto indent pasted text
+nnoremap p p=`]<C-o>
+nnoremap P P=`]<C-o>
 
-" dein {{{
-"===============
-let s:cache_home = expand('~/.cache')
-let s:dein_dir = s:cache_home . '/dein'
-let s:dein_repo = s:dein_dir . '/repos/github.com/Shougo/dein.vim'
 
-" deinがなければclone
-if !isdirectory(s:dein_repo)
-    execute system('git clone https://github.com/Shougo/dein.vim' . ' ' . shellescape(s:dein_repo))
-endif
-let &runtimepath = s:dein_repo . ',' . &runtimepath
 
-" TOML {{{
-" プラグインリストを収めた TOML ファイル
-let s:toml_dir  = '~/.vim/rc'
-let s:toml      = s:toml_dir . '/dein.toml'
-let s:toml_lazy = s:toml_dir . '/dein_lazy.toml'
-
-if dein#load_state(s:dein_dir)
-    call dein#begin(s:dein_dir, [$MYVIMRC, s:toml, s:toml_lazy])
-    call dein#load_toml(s:toml,      {'lazy': 0})
-    call dein#load_toml(s:toml_lazy, {'lazy': 1})
-    call dein#end()
-    call dein#save_state()
-endif
-" }}}
-
-" 未インストールのプラグインをインストール
-if has('vim_starting') && dein#check_install()
-    call dein#install()
-endif
-
-" プラグインロードできたので有効化
 filetype plugin indent on
 syntax enable
-" }}}
+
 
 " lightline {{{
 "===============
@@ -165,7 +160,6 @@ endfunction
 
 " SyntaxHighlight {{{
 "====================
-syntax enable
 set background=dark
 set t_Co=256
 colorscheme hybrid
@@ -220,7 +214,6 @@ imap <C-k> <Plug>(neosnippet_expand_or_jump)
 smap <C-k> <Plug>(neosnippet_expand_or_jump)
 let g:neosnippet#snippets_directory = '~/.vim/snippets/'
 " }}}
-
 
 " Denite {{{
 nnoremap [denite]  <Nop>
@@ -277,13 +270,13 @@ augroup END
 nnoremap <silent> <Space>e :<C-u>tabedit $MYVIMRC<CR>
 nnoremap <silent> <Space>E :<C-u>source $MYVIMRC<CR>
 
+" CursorLine {{{
 highlight CursorLine cterm=underline ctermfg=NONE ctermbg=NONE
 hi clear CursorLine
 
-
 " 'cursorline' を必要な時にだけ有効にする
 " http://d.hatena.ne.jp/thinca/20090530/1243615055
-augroup vimrc_auto_cursorline
+augroup autoCursorLine
   autocmd!
   autocmd CursorMoved,CursorMovedI * call s:auto_cursorline('CursorMoved')
   autocmd CursorHold,CursorHoldI * call s:auto_cursorline('CursorHold')
@@ -312,4 +305,51 @@ augroup vimrc_auto_cursorline
     endif
   endfunction
 augroup END
+" }}}
+
+augroup fileTypeIndent
+    autocmd!
+    autocmd BufNewFile,BufRead vimrc setlocal tabstop=2 softtabstop=2 shiftwidth=2
+augroup END
+
+" http://secret-garden.hatenablog.com/entry/2017/12/22/233144
+" タブの移動
+nnoremap <silent> <C-l> :tabnext<CR>
+nnoremap <silent> <C-h> :tabprevious<CR>
+nnoremap <silent> <C-Tab> :tabnext<CR>
+
+" タブページ自体を左右に移動させる
+command! -bar TabMoveNext :execute "tabmove " tabpagenr() % tabpagenr("$") + (tabpagenr("$") == tabpagenr() ? 0 : 1)
+command! -bar TabMovePrev :execute "tabmove" (tabpagenr() + tabpagenr("$") - 2) % tabpagenr("$") + (tabpagenr() == 1 ? 1 : 0)
+
+nnoremap <silent> <S-l> :TabMoveNext<CR>
+nnoremap <silent> <S-h> :TabMovePrev<CR>
+
+function GuiTabLabel()
+  let label = ''
+  let bufnrlist = tabpagebuflist(v:lnum)
+
+  " このタブページに変更のあるバッファがるときには '+' を追加する
+  for bufnr in bufnrlist
+    if getbufvar(bufnr, "&modified")
+      let label = '+'
+      break
+    endif
+  endfor
+
+  " ウィンドウが複数あるときにはその数を追加する
+  let wincount = tabpagewinnr(v:lnum, '$')
+  if wincount > 1
+    let label .= wincount
+  endif
+  if label != ''
+    let label .= ' '
+  endif
+
+  " バッファ名を追加する
+  return label . bufname(bufnrlist[tabpagewinnr(v:lnum) - 1])
+endfunction
+
+set guitablabel=%{GuiTabLabel()}
+
 
