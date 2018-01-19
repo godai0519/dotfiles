@@ -28,6 +28,19 @@ on_ft = 'cpp'
 repo = 'justmao945/vim-clang'
 if = "!has('nvim')"
 on_ft = ['c', 'cpp']
+hook_add = '''
+" disable auto completion for vim-clang
+let g:clang_auto = 0
+
+" default 'longest' can not work with neocomplete
+let g:clang_c_completeopt   = 'menuone'
+let g:clang_cpp_completeopt = 'menuone'
+
+let g:clang_exec = 'clang'
+let g:clang_format_exec = 'clang-format'
+let g:clang_c_options = '-std=c11'
+let g:clang_cpp_options = '-std=c++1z -stdlib=libc++'
+'''
 
 [[plugins]]
 repo = 'hail2u/vim-css3-syntax'
@@ -43,6 +56,7 @@ depends = 'webapi-vim'
 [[plugins]]
 repo = 'itchyny/lightline.vim'
 depends = ['vim-fugitive', 'vim-gitgutter']
+hook_add = 'source ~/.vim/rc/plugins/lightline.vim'
 
 [[plugins]]
 repo = 'itchyny/vim-parenmatch'
@@ -61,4 +75,12 @@ repo = 'yuttie/comfortable-motion.vim'
 hook_source = '''
   let g:comfortable_motion_no_default_key_mappings = 1
 '''
+
+[[plugins]]
+repo = 'roxma/vim-hug-neovim-rpc'
+on_if = '!has("nvim")'
+
+[[plugins]]
+repo = 'roxma/nvim-yarp'
+on_if = '!has("nvim")'
 

@@ -1,1 +1,2 @@
+set inccommand=split
 
