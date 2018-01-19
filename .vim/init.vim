@@ -5,8 +5,18 @@ function! s:source_rc(file)
     endif
 endfunction
 
-call s:source_rc('init.vim')
-call s:source_rc('dein.vim')
+call s:source_rc('init.rc.vim')
+call s:source_rc('dein.rc.vim')
+
+call s:source_rc('options.rc.vim')
+
+if has('nvim')
+    call s:source_rc('neovim.rc.vim')
+endif
+
+if IsWindows()
+    call s:source_rc('windows.rc.vim')
+endif
 
 " ================== General Config ===================
 
