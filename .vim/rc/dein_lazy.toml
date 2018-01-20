@@ -33,16 +33,17 @@ hook_source = '''
 
 [[plugins]]
 repo = 'zchee/deoplete-go'
-on_ft = 'go'
 depends = ['deoplete.nvim']
+on_ft = 'go'
 
 [[plugins]]
 repo = 'rhysd/vim-clang-format'
+depends = ['vim-operator-user']
 on_ft = ['c', 'cpp', 'objc']
+hook_source = 'source ~/.vim/rc/plugins/vim-clang-format.vim'
 
 [[plugins]]
 repo = 'kana/vim-operator-user'
-depends = ['vim-clang-format']
 
 [[plugins]]
 repo = 'Shougo/neomru.vim'

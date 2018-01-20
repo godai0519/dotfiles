@@ -8,7 +8,6 @@ endfunction
 call s:source_rc('init.rc.vim')
 call s:source_rc('dein.rc.vim')
 
-
 "if !has('vim_starting')
     "call dein#call_hook('source')
     "call dein#call_hook('post_source')
@@ -17,8 +16,8 @@ call s:source_rc('dein.rc.vim')
     filetype plugin indent on
 "endif
 
-
 call s:source_rc('options.rc.vim')
+call s:source_rc('keyconfig.rc.vim')
 
 if has('nvim')
     call s:source_rc('neovim.rc.vim')
@@ -33,97 +32,15 @@ call s:source_rc('plugins/cursorline.vim')
 
 set secure
 
-"" Auto indent pasted text
-"nnoremap p p=`]<C-o>
-"nnoremap P P=`]<C-o>
-"
-
-"" Denite {{{
-"nnoremap [denite]  <Nop>
-"nmap     <Space>u [denite]
-"
-"let g:denite_source_history_yank_enable=1
-"nnoremap <silent> [denite]u :<C-u>Denite<Space>file<CR>
-"nnoremap <silent> [denite]m :<C-u>Denite<Space>file_mru<CR>
-"nnoremap <silent> [denite]f :<C-u>Denite<Space>buffer<CR>
-"nnoremap <silent> [denite]g :<C-u>Denite<Space>grep<CR>
-"nnoremap <silent> [denite]h :<C-u>Denite<Space>history/yank<CR>
-"nnoremap <silent> [denite]b :<C-u>Denite<Space>bookmark<CR>
-"nnoremap <silent> [denite]a :<C-u>DeniteBookmarkAdd<CR>
-"
-"" }}}
 
 " TeX {{{
 let g:tex_conceal='' " texのconcealを無効化（#^ω^）
 " }}}
 
-" vim-clang-format.vim {{{
-let g:clang_format#code_style = 'LLVM'
-let g:clang_format#style_options = {
-    \ 'AccessModifierOffset': -4,
-    \ 'AllowShortBlocksOnASingleLine': 'true',
-    \ 'AllowShortIfStatementsOnASingleLine': 'true',
-    \ 'AlwaysBreakTemplateDeclarations': 'true',
-    \ 'BreakBeforeBraces': 'Stroustrup',
-    \ 'IndentWidth': 4,
-    \ }
-
-" map to <Leader>cf in C++ code
-augroup clang_format
-    autocmd!
-    autocmd FileType c,cpp,objc nnoremap <buffer><Leader>cf :<C-u>ClangFormat<CR>
-    autocmd FileType c,cpp,objc vnoremap <buffer><Leader>cf :ClangFormat<CR>
-augroup END
- " }}}
-"
-"nnoremap <silent> <Space>e :<C-u>tabedit $MYVIMRC<CR>
-"nnoremap <silent> <Space>E :<C-u>source $MYVIMRC<CR>
-"
-
 "augroup fileTypeIndent
 "    autocmd!
 "    autocmd BufNewFile,BufRead vimrc setlocal tabstop=2 softtabstop=2 shiftwidth=2
 "augroup END
-"
-"" http://secret-garden.hatenablog.com/entry/2017/12/22/233144
-"" タブの移動
-"nnoremap <silent> <C-l> :tabnext<CR>
-"nnoremap <silent> <C-h> :tabprevious<CR>
-"nnoremap <silent> <C-Tab> :tabnext<CR>
-"
-"" タブページ自体を左右に移動させる
-"command! -bar TabMoveNext :execute "tabmove " tabpagenr() % tabpagenr("$") + (tabpagenr("$") == tabpagenr() ? 0 : 1)
-"command! -bar TabMovePrev :execute "tabmove" (tabpagenr() + tabpagenr("$") - 2) % tabpagenr("$") + (tabpagenr() == 1 ? 1 : 0)
-"
-"nnoremap <silent> <S-l> :TabMoveNext<CR>
-"nnoremap <silent> <S-h> :TabMovePrev<CR>
-"
-"function GuiTabLabel()
-"  let label = ''
-"  let bufnrlist = tabpagebuflist(v:lnum)
-"
-"  " このタブページに変更のあるバッファがるときには '+' を追加する
-"  for bufnr in bufnrlist
-"    if getbufvar(bufnr, "&modified")
-"      let label = '+'
-"      break
-"    endif
-"  endfor
-"
-"  " ウィンドウが複数あるときにはその数を追加する
-"  let wincount = tabpagewinnr(v:lnum, '$')
-"  if wincount > 1
-"    let label .= wincount
-"  endif
-"  if label != ''
-"    let label .= ' '
-"  endif
-"
-"  " バッファ名を追加する
-"  return label . bufname(bufnrlist[tabpagewinnr(v:lnum) - 1])
-"endfunction
-"
-"set guitablabel=%{GuiTabLabel()}
 "
 
 "let g:python_host_prog = '/full/path/to/neovim2/bin/python'
