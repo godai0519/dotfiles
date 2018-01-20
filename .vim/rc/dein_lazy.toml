@@ -1,6 +1,6 @@
 [[plugins]]
 repo = 'Shougo/deoplete.nvim'
-depends = 'context_filetype.vim'
+depends = ['context_filetype.vim', 'vim-hug-neovim-rpc', 'nvim-yarp']
 on_i = 1
 hook_source = '''
   let g:deoplete#enable_at_startup = 1
@@ -8,65 +8,67 @@ hook_source = '''
 '''
 
 [[plugins]]
-repo = 'zchee/deoplete-clang'
-if = "has('nvim')"
-hook_source = '''
-  let g:deoplete#sources#clang#libclang_path = '/usr/lib/llvm/4/lib64/libclang.so'
-  let g:deoplete#sources#clang#clang_header = '/usr/lib/clang'
-'''
-on_ft = ['c', 'cpp', 'cmake']
-depends = ['deoplete.nvim']
-
-[[plugins]]
-repo = 'zchee/deoplete-jedi'
-if = "has('nvim')"
-on_ft = 'python'
-depends = ['deoplete.nvim']
-
-[[plugins]]
-repo = 'zchee/deoplete-go'
-if = "has('nvim')"
-on_i = 1
-on_ft = 'go'
-depends = ['deoplete.nvim']
+repo = 'Shougo/context_filetype.vim'
 
 [[plugins]]
 repo = 'Shougo/neosnippet.vim'
 depends = ['neosnippet-snippets', 'context_filetype.vim']
 on_event = 'InsertCharPre'
 on_ft = 'snippet'
+hook_source = '''
+  imap <C-k> <Plug>(neosnippet_expand_or_jump)
+  smap <C-k> <Plug>(neosnippet_expand_or_jump)
+  xmap <silent>L <Plug>(neosnipped_expand_target)
+  let g:neosnippet#snippets_directory = '~/.vim/snippets/'
+'''
+
+[[plugins]]
+repo = 'zchee/deoplete-clang'
+on_ft = ['c', 'cpp', 'cmake']
+depends = ['deoplete.nvim']
+hook_source = '''
+  let g:deoplete#sources#clang#libclang_path = '/usr/lib/llvm/4/lib64/libclang.so'
+  let g:deoplete#sources#clang#clang_header = '/usr/lib/llvm/4/include/clang'
+'''
+
+[[plugins]]
+repo = 'zchee/deoplete-go'
+on_ft = 'go'
+depends = ['deoplete.nvim']
+
+[[plugins]]
+repo = 'rhysd/vim-clang-format'
+on_ft = ['c', 'cpp', 'objc']
+
+[[plugins]]
+repo = 'kana/vim-operator-user'
+depends = ['vim-clang-format']
 
 [[plugins]]
 repo = 'Shougo/neomru.vim'
-on_if = 1
 
 [[plugins]]
 repo = 'Shougo/denite.nvim'
 depends = 'neomru.vim'
-
-[[plugins]]
-repo = 'Shougo/context_filetype.vim'
-
-[[plugins]]
-repo = 'kana/vim-altr'
-
-[[plugins]]
-repo = 'tpope/vim-fugitive'
-
-[[plugins]]
-repo = 'airblade/vim-gitgutter'
+on_cmd = 'Denite'
+hook_source = 'source ~/.vim/rc/plugins/denite.vim'
 
 [[plugins]]
 repo = 'scrooloose/syntastic'
-on_ft = 'cpp'
+on_ft = ['c', 'cpp']
 hook_source = '''
- let g:syntastic_cpp_compiler = 'clang++'
- let g:syntastic_cpp_compiler_options = '-std=c++1z'
- let g:syntastic_cpp_check_header = 1
-'''
+  let g:syntastic_check_on_wq = 0
+  let g:syntastic_error_symbol='✗'
+  let g:syntastic_warning_symbol='⚠'
+  let g:syntastic_style_error_symbol = '✗'
+  let g:syntastic_style_warning_symbol = '⚠'
+  hi SyntasticErrorSign ctermfg=160
+  hi SyntasticWarningSign ctermfg=220
 
-[[plugins]]
-repo = 'lervag/vimtex'
-depends = 'vim-quickrun'
-on_ft = 'tex'
+  let g:syntastic_mode_map = { 'mode': 'passive',
+            \ 'active_filetypes': ['c', 'cpp'] }
+  let g:syntastic_cpp_compiler = 'clang++'
+  let g:syntastic_cpp_compiler_options = '-std=c++1z'
+  let g:syntastic_cpp_check_header = 1
+'''
 

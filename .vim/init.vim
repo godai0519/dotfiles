@@ -38,12 +38,6 @@ set secure
 "nnoremap P P=`]<C-o>
 "
 
-"" Neosnippet {{{
-"imap <C-k> <Plug>(neosnippet_expand_or_jump)
-"smap <C-k> <Plug>(neosnippet_expand_or_jump)
-"let g:neosnippet#snippets_directory = '~/.vim/snippets/'
-"" }}}
-"
 "" Denite {{{
 "nnoremap [denite]  <Nop>
 "nmap     <Space>u [denite]
@@ -58,43 +52,29 @@ set secure
 "nnoremap <silent> [denite]a :<C-u>DeniteBookmarkAdd<CR>
 "
 "" }}}
-"
-"" vim-altr {{{
-"noremap <F3> <Plug>(altr-forward)
-"noremap <F2> <Plug>(altr-back)
-"" }}}
-"
-"" vim-parenmatch {{{
-"let g:loaded_matchparen = 1 " vim標準のプラグインの無効化
-"" }}}
-"
-"" indentLine {{{
-"let g:indentLine_color_term = 111
-"let g:indentLine_color_gui = '#708090'
-"" }}}
-"
-"" TeX {{{
-"let g:tex_conceal='' " texのconcealを無効化（#^ω^）
-"" }}}
-"
-"" vim-clang-format.vim {{{
-"let g:clang_format#code_style = 'LLVM'
-"let g:clang_format#style_options = {
-"    \ 'AccessModifierOffset': -4,
-"    \ 'AllowShortBlocksOnASingleLine': 'true',
-"    \ 'AllowShortIfStatementsOnASingleLine': 'true',
-"    \ 'AlwaysBreakTemplateDeclarations': 'true',
-"    \ 'BreakBeforeBraces': 'Stroustrup',
-"    \ 'IndentWidth': 4,
-"    \ }
-"
-"" map to <Leader>cf in C++ code
-"augroup clang_format
-"    autocmd!
-"    autocmd FileType c,cpp,objc nnoremap <buffer><Leader>cf :<C-u>ClangFormat<CR>
-"    autocmd FileType c,cpp,objc vnoremap <buffer><Leader>cf :ClangFormat<CR>
-"augroup END
-" " }}}
+
+" TeX {{{
+let g:tex_conceal='' " texのconcealを無効化（#^ω^）
+" }}}
+
+" vim-clang-format.vim {{{
+let g:clang_format#code_style = 'LLVM'
+let g:clang_format#style_options = {
+    \ 'AccessModifierOffset': -4,
+    \ 'AllowShortBlocksOnASingleLine': 'true',
+    \ 'AllowShortIfStatementsOnASingleLine': 'true',
+    \ 'AlwaysBreakTemplateDeclarations': 'true',
+    \ 'BreakBeforeBraces': 'Stroustrup',
+    \ 'IndentWidth': 4,
+    \ }
+
+" map to <Leader>cf in C++ code
+augroup clang_format
+    autocmd!
+    autocmd FileType c,cpp,objc nnoremap <buffer><Leader>cf :<C-u>ClangFormat<CR>
+    autocmd FileType c,cpp,objc vnoremap <buffer><Leader>cf :ClangFormat<CR>
+augroup END
+ " }}}
 "
 "nnoremap <silent> <Space>e :<C-u>tabedit $MYVIMRC<CR>
 "nnoremap <silent> <Space>E :<C-u>source $MYVIMRC<CR>
@@ -146,6 +126,8 @@ set secure
 "set guitablabel=%{GuiTabLabel()}
 "
 
+"let g:python_host_prog = '/full/path/to/neovim2/bin/python'
+"let g:python3_host_prog = '/full/path/to/neovim3/bin/python'
 
 " SyntaxHighlight
 "====================

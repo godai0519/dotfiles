@@ -15,9 +15,6 @@ function! s:check_backspace() abort
   return !col || getline('.')[col - 1] =~ '\s'
 endfunction
 
-if has('conceal')
-  set conceallevel=2 concealcursor=i
-
 call deoplete#custom#source('clang', 'input_pattern', '\.\w*|\.->\w*|\w+::\w*')
 call deoplete#custom#source('clang', 'max_pattern_length', -1)
 

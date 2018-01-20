@@ -13,6 +13,13 @@ repo = 'Shougo/neosnippet-snippets'
 
 [[plugins]]
 repo = 'Yggdroot/indentLine'
+hook_add = '''
+  let g:indentLine_color_term = 111
+  let g:indentLine_color_gui = '#708090'
+'''
+
+[[plugins]]
+repo = 'tpope/vim-fugitive'
 
 [[plugins]]
 repo = 'thinca/vim-quickrun'
@@ -25,56 +32,24 @@ repo = 'vim-jp/cpp-vim'
 on_ft = 'cpp'
 
 [[plugins]]
-repo = 'justmao945/vim-clang'
-if = "!has('nvim')"
-on_ft = ['c', 'cpp']
-hook_add = '''
-" disable auto completion for vim-clang
-let g:clang_auto = 0
-
-" default 'longest' can not work with neocomplete
-let g:clang_c_completeopt   = 'menuone'
-let g:clang_cpp_completeopt = 'menuone'
-
-let g:clang_exec = 'clang'
-let g:clang_format_exec = 'clang-format'
-let g:clang_c_options = '-std=c11'
-let g:clang_cpp_options = '-std=c++1z -stdlib=libc++'
-'''
-
-[[plugins]]
-repo = 'hail2u/vim-css3-syntax'
-on_ft = 'html'
-
-[[plugins]]
-repo = 'mattn/webapi-vim'
-
-[[plugins]]
-repo = 'moznion/hateblo.vim'
-depends = 'webapi-vim'
-
-[[plugins]]
 repo = 'itchyny/lightline.vim'
 depends = ['vim-fugitive', 'vim-gitgutter']
 hook_add = 'source ~/.vim/rc/plugins/lightline.vim'
 
 [[plugins]]
 repo = 'itchyny/vim-parenmatch'
-hook_source = '''
-  let g:loaded_matchparen = 1
-'''
+hook_add = 'let g:loaded_matchparen = 1'
 
 [[plugins]]
 repo = 'itchyny/vim-cursorword'
-hook_source = '''
-  let g:loaded_matchparen = 1
-'''
+hook_add = '''let g:loaded_matchparen = 1'''
+
+[[plugins]]
+repo = 'airblade/vim-gitgutter'
+hook_add = 'let g:gitgutter_highlight_lines = 1'
 
 [[plugins]]
 repo = 'yuttie/comfortable-motion.vim'
-hook_source = '''
-  let g:comfortable_motion_no_default_key_mappings = 1
-'''
 
 [[plugins]]
 repo = 'roxma/vim-hug-neovim-rpc'
