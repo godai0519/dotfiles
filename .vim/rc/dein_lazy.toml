@@ -1,68 +1,76 @@
-[[plugins]]
-repo = 'Shougo/neocomplete.vim'
-depends = 'context_filetype.vim'
-if = "has('lua')"
-on_event = 'InsertEnter'
-hook_source = '''
-  let g:neocomplete#enable_at_startup = 1
-#  source ~/.vim/rc/plugins/neocomplete.rc.vim
-'''
-
-#[[plugins]]
-#repo = 'zchee/deoplete-clang'
-#on_ft = ['c', 'cpp']
-#
-#[[plugins]]
-#repo = 'zchee/deoplete-jedi'
-#on_ft = 'python'
-#
-#[[plugins]]
-#repo = 'zchee/deoplete-go'
-#on_i = 1
-#on_ft = 'go'
-#
-#[[plugins]]
-#repo = 'Shougo/deoplete.nvim'
-#depends = 'context_filetype.vim'
-#if = "has('nvim')"
-#on_i = 1
-#hook_source = '''
-#  let g:deoplete#enable_at_startup = 1
-##  source ~/.vim/rc/plugins/deoplete.rc.vim
-#'''
+# =================== General Config ==================
 
 [[plugins]]
 repo = 'Shougo/neosnippet.vim'
 depends = ['neosnippet-snippets', 'context_filetype.vim']
 on_event = 'InsertCharPre'
 on_ft = 'snippet'
-# hook_source = 'source ~/.vim/rc/plugins/neosnippet.rc.vim'
-
-[[plugins]]
-repo = 'Shougo/neomru.vim'
-on_if = 1
-
-[[plugins]]
-repo = 'Shougo/unite.vim'
-depends = 'neomru.vim'
+    hook_source = '''
+    imap <C-k> <Plug>(neosnippet_expand_or_jump)
+    smap <C-k> <Plug>(neosnippet_expand_or_jump)
+    xmap <silent>L <Plug>(neosnipped_expand_target)
+    let g:neosnippet#snippets_directory = '~/.vim/snippets/'
+'''
 
 [[plugins]]
 repo = 'Shougo/context_filetype.vim'
 
+[[plugins]] # denite
+repo = 'Shougo/neomru.vim'
+
+# 範囲選択後の操作の追加
 [[plugins]]
-repo = 'kana/vim-altr'
+repo = 'kana/vim-operator-user'
+
+# ====================== Deoplete =====================
 
 [[plugins]]
-repo = 'tpope/vim-fugitive'
+repo = 'Shougo/deoplete.nvim'
+depends = ['context_filetype.vim', 'vim-hug-neovim-rpc', 'nvim-yarp']
+on_i = 1
+hook_source = '''
+  let g:deoplete#enable_at_startup = 1
+  source ~/.vim/rc/plugins/deoplete.vim
+'''
 
 [[plugins]]
-repo = 'airblade/vim-gitgutter'
+repo = 'zchee/deoplete-clang'
+on_ft = ['c', 'cpp', 'cmake']
+depends = ['deoplete.nvim']
+hook_source = '''
+let g:deoplete#sources#clang#libclang_path = '/usr/lib/llvm/4/lib64/libclang.so'
+let g:deoplete#sources#clang#clang_header = '/usr/lib/llvm/4/include/clang'
+'''
+
+[[plugins]]
+repo = 'zchee/deoplete-go'
+depends = ['deoplete.nvim']
+on_ft = 'go'
+
+# ======================== C++ ========================
+
+[[plugins]]
+repo = 'rhysd/vim-clang-format'
+depends = ['vim-operator-user']
+on_ft = ['c', 'cpp', 'objc']
+hook_source = 'source ~/.vim/rc/plugins/vim-clang-format.vim'
 
 [[plugins]]
 repo = 'scrooloose/syntastic'
-on_ft = 'cpp'
+on_ft = ['c', 'cpp']
 hook_source = '''
- let g:syntastic_cpp_compiler="g++"
- let g:syntastic_cpp_compiler_option="-std=c++1z"
+  let g:syntastic_check_on_wq = 0
+  let g:syntastic_error_symbol='✗'
+  let g:syntastic_warning_symbol='⚠'
+  let g:syntastic_style_error_symbol = '✗'
+  let g:syntastic_style_warning_symbol = '⚠'
+  hi SyntasticErrorSign ctermfg=160
+  hi SyntasticWarningSign ctermfg=220
+
+  let g:syntastic_mode_map = { 'mode': 'passive',
+            \ 'active_filetypes': ['c', 'cpp'] }
+  let g:syntastic_cpp_compiler = 'clang++'
+  let g:syntastic_cpp_compiler_options = '-std=c++1z'
+  let g:syntastic_cpp_check_header = 1
 '''
 
