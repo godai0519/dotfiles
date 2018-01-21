@@ -1,1 +1,2 @@
-.vim/init.vim
+execute 'source' fnamemodify(expand('<sfile>'), ':h').'/.vim/init.vim'
+

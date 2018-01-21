@@ -1,16 +1,19 @@
+# Temporary Files
+
+.netrwhist
+xmonad-x86_64-linux
+xmonad.errors
+xmonad.hi
+
+# Executable Files
 *.o
 *.exe
 *.obj
-
 *.a
 *.so
 *.lib
 *.dll
 
-*.log
-*.dvi
-*.aux
-
+# Subversion Files
 .svn
-
 
