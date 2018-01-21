@@ -9,7 +9,6 @@ nnoremap <silent> <Space>E :<C-u>source $MYVIMRC<CR>
 " タブの移動
 nnoremap <silent> <C-l> :tabnext<CR>
 nnoremap <silent> <C-h> :tabprevious<CR>
-nnoremap <silent> <C-Tab> :tabnext<CR>
 
 " タブページ自体を左右に移動させる
 command! -bar TabMoveNext :execute "tabmove " tabpagenr() % tabpagenr("$") + (tabpagenr("$") == tabpagenr() ? 0 : 1)
@@ -47,7 +46,6 @@ set guitablabel=%{GuiTabLabel()}
 
 " ================= Paste Auto Indent =================
 
-" Auto indent pasted text
 nnoremap p p=`]<C-o>
 nnoremap P P=`]<C-o>
 

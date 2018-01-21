@@ -1,3 +1,29 @@
+# =================== General Config ==================
+
+[[plugins]]
+repo = 'Shougo/neosnippet.vim'
+depends = ['neosnippet-snippets', 'context_filetype.vim']
+on_event = 'InsertCharPre'
+on_ft = 'snippet'
+    hook_source = '''
+    imap <C-k> <Plug>(neosnippet_expand_or_jump)
+    smap <C-k> <Plug>(neosnippet_expand_or_jump)
+    xmap <silent>L <Plug>(neosnipped_expand_target)
+    let g:neosnippet#snippets_directory = '~/.vim/snippets/'
+'''
+
+[[plugins]]
+repo = 'Shougo/context_filetype.vim'
+
+[[plugins]] # denite
+repo = 'Shougo/neomru.vim'
+
+# 範囲選択後の操作の追加
+[[plugins]]
+repo = 'kana/vim-operator-user'
+
+# ====================== Deoplete =====================
+
 [[plugins]]
 repo = 'Shougo/deoplete.nvim'
 depends = ['context_filetype.vim', 'vim-hug-neovim-rpc', 'nvim-yarp']
@@ -8,27 +34,12 @@ hook_source = '''
 '''
 
 [[plugins]]
-repo = 'Shougo/context_filetype.vim'
-
-[[plugins]]
-repo = 'Shougo/neosnippet.vim'
-depends = ['neosnippet-snippets', 'context_filetype.vim']
-on_event = 'InsertCharPre'
-on_ft = 'snippet'
-hook_source = '''
-  imap <C-k> <Plug>(neosnippet_expand_or_jump)
-  smap <C-k> <Plug>(neosnippet_expand_or_jump)
-  xmap <silent>L <Plug>(neosnipped_expand_target)
-  let g:neosnippet#snippets_directory = '~/.vim/snippets/'
-'''
-
-[[plugins]]
 repo = 'zchee/deoplete-clang'
 on_ft = ['c', 'cpp', 'cmake']
 depends = ['deoplete.nvim']
 hook_source = '''
-  let g:deoplete#sources#clang#libclang_path = '/usr/lib/llvm/4/lib64/libclang.so'
-  let g:deoplete#sources#clang#clang_header = '/usr/lib/llvm/4/include/clang'
+let g:deoplete#sources#clang#libclang_path = '/usr/lib/llvm/4/lib64/libclang.so'
+let g:deoplete#sources#clang#clang_header = '/usr/lib/llvm/4/include/clang'
 '''
 
 [[plugins]]
@@ -36,23 +47,13 @@ repo = 'zchee/deoplete-go'
 depends = ['deoplete.nvim']
 on_ft = 'go'
 
+# ======================== C++ ========================
+
 [[plugins]]
 repo = 'rhysd/vim-clang-format'
 depends = ['vim-operator-user']
 on_ft = ['c', 'cpp', 'objc']
 hook_source = 'source ~/.vim/rc/plugins/vim-clang-format.vim'
-
-[[plugins]]
-repo = 'kana/vim-operator-user'
-
-[[plugins]]
-repo = 'Shougo/neomru.vim'
-
-[[plugins]]
-repo = 'Shougo/denite.nvim'
-depends = 'neomru.vim'
-on_cmd = 'Denite'
-hook_source = 'source ~/.vim/rc/plugins/denite.vim'
 
 [[plugins]]
 repo = 'scrooloose/syntastic'

@@ -1,40 +1,31 @@
+# ================== General Plugins ==================
+
 [[plugins]]
 repo = 'Shougo/dein.vim'
+
+[[plugins]]
+repo = 'Shougo/neosnippet-snippets'
 
 [[plugins]]
 repo = 'Shougo/vimproc.vim'
 build = 'make'
 
 [[plugins]]
-repo = 'w0ng/vim-hybrid'
-
-[[plugins]]
-repo = 'Shougo/neosnippet-snippets'
-
-[[plugins]]
-repo = 'Yggdroot/indentLine'
-hook_add = '''
-  let g:indentLine_color_term = 111
-  let g:indentLine_color_gui = '#708090'
-'''
-
-[[plugins]]
-repo = 'tpope/vim-fugitive'
-
-[[plugins]]
-repo = 'thinca/vim-quickrun'
-
-[[plugins]]
-repo = 'rhysd/wandbox-vim'
-
-[[plugins]]
-repo = 'vim-jp/cpp-vim'
-on_ft = 'cpp'
+repo = 'Shougo/denite.nvim'
+depends = 'neomru.vim'
+hook_source = 'source ~/.vim/rc/plugins/denite.vim'
 
 [[plugins]]
 repo = 'itchyny/lightline.vim'
 depends = ['vim-fugitive', 'vim-gitgutter']
 hook_add = 'source ~/.vim/rc/plugins/lightline.vim'
+
+[[plugins]]
+repo = 'Yggdroot/indentLine'
+hook_add = '''
+let g:indentLine_color_term = 111
+let g:indentLine_color_gui = '#708090'
+'''
 
 [[plugins]]
 repo = 'itchyny/vim-parenmatch'
@@ -45,17 +36,41 @@ repo = 'itchyny/vim-cursorword'
 hook_add = '''let g:loaded_matchparen = 1'''
 
 [[plugins]]
-repo = 'airblade/vim-gitgutter'
-hook_add = 'let g:gitgutter_highlight_lines = 1'
-
-[[plugins]]
 repo = 'yuttie/comfortable-motion.vim'
 
-[[plugins]]
+[[plugins]] # deoplete
 repo = 'roxma/vim-hug-neovim-rpc'
 on_if = '!has("nvim")'
 
-[[plugins]]
+[[plugins]] # deoplete
 repo = 'roxma/nvim-yarp'
 on_if = '!has("nvim")'
+
+# =================== Color Schemes ===================
+
+[[plugins]]
+repo = 'w0ng/vim-hybrid'
+
+# ======================== Git ========================
+
+[[plugins]]
+repo = 'tpope/vim-fugitive'
+
+[[plugins]]
+repo = 'airblade/vim-gitgutter'
+hook_add = 'let g:gitgutter_highlight_lines = 1'
+
+# ===================== Quick Run =====================
+
+[[plugins]]
+repo = 'thinca/vim-quickrun'
+
+[[plugins]]
+repo = 'rhysd/wandbox-vim'
+
+# ======================== C++ ========================
+
+[[plugins]]
+repo = 'vim-jp/cpp-vim'
+on_ft = 'cpp'
 
