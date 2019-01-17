@@ -2,7 +2,6 @@ Config { font = "xft:Koruri-9:SemiBold"
        , bgColor = "black"
        , fgColor = "grey"
        , position = TopP 0 100,
-       , lowerOnStart = True
        , commands = [ Run DynNetwork [ "--template", "<dev>: ⇧<tx>/⇩<rx> KB/s"
                                      , "--Low"     , "1000000"
                                      , "--High"    , "30000000"

@@ -21,7 +21,7 @@ myWorkspaces = ["Work", "Browse", "Others", "SNS"]
 myStartupHook = do
     spawn "$HOME/.xmonad/wallpaper.sh"
     setWMName "LG3D"
-myLayoutHook = avoidStruts $ smartSpacing 3 $ (dragPane Vertical 0.1 0.5 ||| ThreeColMid 1 (3/100) (1/2) ||| OneBig (3/4) (3/4) ||| Grid ||| Full)
+myLayoutHook = (avoidStruts $ smartSpacing 3 $ (ThreeColMid 1 (3/100) (1/2) ||| OneBig (3/4) (3/4) ||| Grid)) ||| Full
 myManageHookFloat = composeAll
     [(className =? "mikutter.rb" <&&> windowName =? "mikutter_image_preview") --> doFloat
     --[ className =? "Mikutter.rb" --> doFloat
@@ -51,7 +51,7 @@ myAdditionalKeysP =
     , ("<XF86LaunchA>", spawn "$HOME/dotfiles/proxy_toggle.sh on && notify-send 'Enable Proxy' ''")
     , ("<XF86Explorer>", spawn "$HOME/dotfiles/proxy_toggle.sh off &&  notify-send 'Dissable Proxy' ''")
 
-    , ("M-r", spawn "exe=`dmenu_run -l 10 -fn 'Koruri:size=12'` && exec $exe")
+    , ("M-r", spawn "exe=`dmenu_run -fn 'xft:Ricty Discord for Powerline:style=RegularForPowerline:size=9:antialias=true'` && exec $exe")
     , ("M-u", spawn "thunderbird-daily")
     , ("M-i", spawn "firefox-nightly")
     , ("M-o", spawn "opera")
@@ -67,7 +67,7 @@ myPP = xmobarPP { ppTitle  = xmobarColor "white" "" . shorten 80 }
 -- }}}
 
 -- Main Function {{{ 
-main = xmonad . myConfig =<< spawnPipe myBar
+main = xmonad . docks . myConfig =<< spawnPipe myBar
 -- }}}
 
 -- Configuration (No change, basically) {{{
