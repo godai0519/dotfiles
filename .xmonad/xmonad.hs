@@ -34,7 +34,7 @@ myLogHook h = dynamicLogWithPP myPP { ppOutput = hPutStrLn h }
 
 myAdditionalKeysP :: [([Char], X ())]
 myAdditionalKeysP =
-    [  ("<XF86AudioMute>", spawn "if [ -n \"$(amixer sget Master | grep '\\[off\\]')\" ]; then amixer sset Master unmute; amixer sset PCM unmute; amixer sset Headphone unmute; amixer sset Speaker unmute; else amixer sset Master mute; amixer sset PCM mute; amixer sset Headphone mute; amixer sset Speaker mute; fi")
+    [ ("<XF86AudioMute>", spawn "if [ -n \"$(amixer sget Master | grep '\\[off\\]')\" ]; then amixer sset Master unmute; amixer sset PCM unmute; amixer sset Headphone unmute; amixer sset Speaker unmute; else amixer sset Master mute; amixer sset PCM mute; amixer sset Headphone mute; amixer sset Speaker mute; fi")
     , ("<XF86AudioMicMute>", spawn "amixer sset Mic toggle")
     , ("<XF86AudioRaiseVolume>", spawn "amixer set Master 9%+")
     , ("<XF86AudioLowerVolume>", spawn "amixer set Master 9%-")
