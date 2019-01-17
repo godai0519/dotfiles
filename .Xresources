@@ -27,14 +27,7 @@ URxvt.inputMethod: fcitx
 URxvt.preeditType: OnTheSpot
 
 ! Ext
-URxvt.perl-ext-common: default,xim-onthespot,tabbedex,clipboard,url-select
-
-! TabbedEx
-URxvt.tabbed.new-button: true
-URxvt.tabbed.tabbar-fg: 2
-URxvt.tabbed.tabbar-bg: #001020
-URxvt.tabbed.tab-fg:    3
-URxvt.tabbed.tab-bg:    #001020
+URxvt.perl-ext-common: default,xim-onthespot,clipboard,url-select
 
 ! clipboard
 URxvt.keysym.M-c: perl:clipboard:copy
