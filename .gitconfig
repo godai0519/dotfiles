@@ -1,6 +1,7 @@
 [user]
     name = Godai Azuma
-    email = godai0519@gmail.com
+    email = azuma.g.aa@m.titech.ac.jp
+	signingkey = 38468604DDF59670
 
 [color]
     status = auto
@@ -43,3 +44,5 @@
     au = add -u
     commit = commit -s
 
+[commit]
+	gpgsign = true
