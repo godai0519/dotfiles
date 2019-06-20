@@ -1,11 +1,12 @@
 import XMonad
 import XMonad.Hooks.DynamicLog
 import XMonad.Hooks.ManageDocks
+import XMonad.Hooks.ManageHelpers
 import XMonad.Hooks.SetWMName
+import XMonad.Layout.NoBorders
+import XMonad.Layout.ToggleLayouts
 import XMonad.Layout.Spacing
-import XMonad.Layout.DragPane
-import XMonad.Layout.ThreeColumns
-import XMonad.Layout.OneBig
+import XMonad.Layout.ResizableTile
 import XMonad.Layout.Grid
 import XMonad.Util.Run
 import XMonad.Util.EZConfig
@@ -21,15 +22,19 @@ myWorkspaces = ["Work", "Browse", "Others", "SNS"]
 myStartupHook = do
     spawn "$HOME/.xmonad/wallpaper.sh"
     setWMName "LG3D"
-myLayoutHook = (avoidStruts $ smartSpacing 3 $ (ThreeColMid 1 (3/100) (1/2) ||| OneBig (3/4) (3/4) ||| Grid)) ||| Full
+myLayout = (ResizableTall 1 (1/201) (116/201) [])
+myLayoutHook = avoidStruts $ ( toggleLayouts (noBorders Full) $ smartSpacing 3 myLayout)
 myManageHookFloat = composeAll
-    [(className =? "mikutter.rb" <&&> windowName =? "mikutter_image_preview") --> doFloat
-    --[ className =? "Mikutter.rb" --> doFloat
+    [ windowName =? "mikutter_image_preview" --> doCenterFloat
+    , isDialog                               --> doCenterFloat
+    , isFullscreen                           --> doFullFloat
     ]
     where
         windowName = stringProperty "WM_NAME"
         notInMonad r = return $ not r
-myManageHook = myManageHookFloat <+> manageDocks
+myManageHookShift = composeAll
+    [ className =? "MATLAB" --> doShift "1"
+    ]
 myLogHook h = dynamicLogWithPP myPP { ppOutput = hPutStrLn h }
 
 myAdditionalKeysP :: [([Char], X ())]
@@ -41,6 +46,8 @@ myAdditionalKeysP =
     , ("<XF86MonBrightnessDown>", spawn "xbacklight -dec 5")
     , ("<XF86MonBrightnessUp>", spawn "xbacklight -inc 5")
 
+    , ("M-<Backspace>", spawn "dm-tool lock")
+    , ("M-=", spawn "xset dpms force off")
     , ("M1-<F1>", spawn "sudo chvt 1")
     , ("M1-<F2>", spawn "sudo chvt 2")
     , ("M1-<F3>", spawn "sudo chvt 3")
@@ -48,17 +55,13 @@ myAdditionalKeysP =
     , ("M1-<F5>", spawn "sudo chvt 5")
     , ("M1-<F6>", spawn "sudo chvt 6")
     , ("M1-<F7>", spawn "sudo chvt 7")
-    , ("<XF86LaunchA>", spawn "$HOME/dotfiles/proxy_toggle.sh on && notify-send 'Enable Proxy' ''")
-    , ("<XF86Explorer>", spawn "$HOME/dotfiles/proxy_toggle.sh off &&  notify-send 'Dissable Proxy' ''")
 
     , ("M-r", spawn "exe=`dmenu_run -fn 'xft:Ricty Discord for Powerline:style=RegularForPowerline:size=9:antialias=true'` && exec $exe")
-    , ("M-u", spawn "thunderbird-daily")
-    , ("M-i", spawn "firefox-nightly")
-    , ("M-o", spawn "opera")
-    , ("M-p", spawn "mikutter")
-    , ("M-f", spawn "krusader")
+    , ("M-m", spawn "thunderbird")
+    , ("M-i", spawn "firefox")
 
     , ("M-<Return>", spawn myTerminal)
+    , ("M-f", sendMessage ToggleLayout)
     ]
 
 -- Setting of XMobar {{{  
@@ -80,7 +83,9 @@ myConfig statusBar = defaultConfig
     -- Hocks
     , startupHook = myStartupHook
     , layoutHook = myLayoutHook
-    , manageHook = myManageHook
+    , manageHook = myManageHookShift <+>
+                   myManageHookFloat <+>
+                   manageDocks
     , logHook = myLogHook statusBar
 
     -- Appearance
