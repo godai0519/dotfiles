@@ -8,6 +8,7 @@ alias ks='ls --color=auto'
 alias grep='grep --color=auto'
 alias diff='colordiff'
 alias mkdir='mkdir -p -v'
+alias sudo="sudo env PATH=\"SUDO_PATH:$PATH\""
 
 ### Git Alias ### 
 # {{{1
@@ -73,8 +74,7 @@ autoload -Uz compinit
 compinit
 
 zstyle ':completion:*:default' menu select=1
-zstyle ':completion:*:sudo:*' command-path /usr/local/sbin /usr/local/bin \
-                     /usr/sbin /usr/bin /sbin /bin /usr/X11R6/bin
+zstyle ':completion:*:sudo:*' environ PATH="$SUDO_PATH:$PATH"
 zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}'
 
 ### Prompt###
