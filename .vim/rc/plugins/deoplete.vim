@@ -1,9 +1,7 @@
-inoremap <silent><expr> <TAB> pumbisible() ? "\<C-n>" :
-"                                \ neosnippet#expandable_or_jumpable() ?
-"                                \ \<Plug>(neosnippet_expand_or_jump) : \<TAB>
-                                \ <SID>check_backspace() ? \<TAB> :
-                                \ deoplete#manual_complete()
-inoremap <expr><S-TAB>        pumbisible() ? "\<C-p>" : "\<C-h>"
+inoremap <expr><TAB> pumvisible() ? "\<C-n>" :
+    \ neosnippet#expandable_or_jumpable() ?
+    \     "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
+inoremap <expr><S-TAB>        pumvisible() ? "\<C-p>" : "\<C-h>"
 inoremap <expr><C-h> deoplete#smart_close_popup()."\<C-h>"
 inoremap <expr><BS>  deoplete#smart_close_popup()."\<C-h>"
 
