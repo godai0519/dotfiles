@@ -10,6 +10,11 @@ alias diff='colordiff'
 alias mkdir='mkdir -p -v'
 alias sudo="sudo env PATH=\"SUDO_PATH:$PATH\""
 
+if [[ -n “$TMUX” ]]; then
+    bindkey '\e[1~' beginning-of-line
+    bindkey '\e[4~' end-of-line
+fi
+
 ### Git Alias ### 
 # {{{1
 alias gs='git status'

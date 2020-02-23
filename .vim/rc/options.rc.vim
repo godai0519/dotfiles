@@ -8,7 +8,7 @@ set autoread                   "書き換え時，自動で読みなおす
 set backspace=indent,eol,start "BSで文字を消せるように
 set nrformats=alpha,hex        "<C-a>と<C-x>での増減について，8進却下・英字許可
 set hidden                     "保存しないで他のファイルを編集可能に
-set clipboard=unnamed          "OSのクリップボード使用
+set clipboard+=unnamed         "OSのクリップボード使用
 set foldmethod=marker          "markerで自動折りたたみ可能
 set pumheight=10
 
