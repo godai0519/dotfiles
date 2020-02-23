@@ -20,21 +20,3 @@ if IsWindows()
     set shellslash
 endif
 
-" ======================= Dein ========================
-
-let s:cache_dir = expand('~/.cache')
-if !isdirectory(s:cache_dir)
-    call mkdir(s:cache_dir, 'p')
-endif
-
-let s:dein_dir = finddir('dein.vim', '.;')
-if s:dein_dir != '' || &runtimepath !~ '/dein.vim'
-    if s:dein_dir == '' && &runtimepath !~ '/dein.vim'
-        let s:dein_dir = expand(s:cache_dir . '/dein') . '/repos/github.com/Shougo/dein.vim'
-        if !isdirectory(s:dein_dir)
-            execute '!git clone https://github.com/Shougo/dein.vim' s:dein_dir
-        endif
-    endif
-    execute 'set runtimepath^=' . substitute(fnamemodify(s:dein_dir, ':p'), '/$', '', '')
-endif
-
