@@ -87,7 +87,8 @@ zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}'
 autoload -Uz colors;colors
 
 # 一般ユーザ時
-tmp_prompt="%{$fg[red]%}%n%{$reset_color%} %{${fg[green]}%}%~%{${reset_color}%} %{$reset_color%}%# "
+tmp_prompt='%F{240}%n%F{red}@%F{green}%m:%F{141}%d$ %F{reset}'
+tmp_prompt=$'%F{9}%n%F{reset} at %F{214}%m%F{reset} in %F{green}%~%F{reset}\n%# '
 tmp_prompt2="%{${fg[cyan]}%}%_> %{${reset_color}%}"
 tmp_rprompt="[%{$fg_no_bold[yellow]%}%?%{$reset_color%}]"
 #tmp_sprompt="%{${fg[yellow]}%}%r is correct? [Yes, No, Abort, Edit]:%{${reset_color}%}"
